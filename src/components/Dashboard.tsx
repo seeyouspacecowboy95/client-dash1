@@ -61,24 +61,24 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
           {/* Quick Actions */}
           <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
             <button className="flex flex-col items-center p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <FileText className="w-8 h-8 text-orange-600" />
-              <span className="text-gray-900 dark:text-white mt-2">View Statement</span>
+              <FileText className="w-4 h-4 text-orange-600" />
+              <span className="text-xs text-gray-900 dark:text-white mt-2">View Statement</span>
             </button>
             <button className="flex flex-col items-center p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <CreditCard className="w-8 h-8 text-orange-600" />
-              <span className="text-gray-900 dark:text-white mt-2">Settle Account</span>
+              <CreditCard className="w-4 h-4 text-orange-600" />
+              <span className="text-xs text-gray-900 dark:text-white mt-2">Settle Account</span>
             </button>
             <button className="flex flex-col items-center p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <HandshakeIcon className="w-8 h-8 text-orange-600" />
-              <span className="text-gray-900 dark:text-white mt-2">Payment Arrangement</span>
+              <HandshakeIcon className="w-4 h-4 text-orange-600" />
+              <span className="text-xs text-gray-900 dark:text-white mt-2">Payment Arrangement</span>
             </button>
             <button className="flex flex-col items-center p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <Activity className="w-8 h-8 text-orange-600" />
-              <span className="text-gray-900 dark:text-white mt-2">Submit Reading</span>
+              <Activity className="w-4 h-4 text-orange-600" />
+              <span className="text-xs text-gray-900 dark:text-white mt-2">Submit Reading</span>
             </button> 
             <button className="flex flex-col items-center p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <MessageSquare className="w-8 h-8 text-orange-600" />
-              <span className="text-gray-900 dark:text-white mt-2">Log Query</span>
+              <MessageSquare className="w-4 h-4 text-orange-600" />
+              <span className="text-xs text-gray-900 dark:text-white mt-2">Log Query</span>
             </button>
           </div>
 
