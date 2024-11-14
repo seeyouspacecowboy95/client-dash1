@@ -45,15 +45,15 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           {/* Greeting */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{greeting}</h1>
+            <h1 className="text-lg font-bold text-gray-900 dark:text-white">{greeting}</h1>
           </div>
 
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
             {stats.map((stat, index) => (
               <div key={index} className="bg-white dark:bg-dark-card p-6 rounded-lg shadow-sm">
-                <p className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</p>
-                <p className="text-2xl font-semibold text-gray-900 dark:text-white">{stat.value}</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400">{stat.label}</p>
+                <p className="text-lg font-semibold text-gray-900 dark:text-white">{stat.value}</p>
               </div>
             ))}
           </div>
