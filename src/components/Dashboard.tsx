@@ -27,9 +27,10 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
 
   const stats = [
     { label: 'Current Balance', value: 'R 2,450.00' },
+    { label: 'Due Date', value: '25 Nov 2024' },
     { label: 'Last Payment', value: 'R 500.00' },
-    { label: 'Due Date', value: '25 Mar 2024' },
-    { label: 'Account Status', value: 'Active' },
+    { label: 'Last Payment Date', value: '25 Oct 2024'},
+  {/* { label: 'Account Status', value: 'Active' }, */}
   ];
 
   return (
@@ -65,12 +66,16 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
             </button>
             <button className="flex flex-col items-center p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
               <CreditCard className="w-8 h-8 text-orange-600" />
-              <span className="text-gray-900 dark:text-white mt-2">Make Payment</span>
+              <span className="text-gray-900 dark:text-white mt-2">Settle Account</span>
             </button>
+            {/* <button className="flex flex-col items-center p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <CreditCard className="w-8 h-8 text-orange-600" />
+              <span className="text-gray-900 dark:text-white mt-2">Payment Arrangement</span>
+            </button> */}
             <button className="flex flex-col items-center p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
               <Activity className="w-8 h-8 text-orange-600" />
               <span className="text-gray-900 dark:text-white mt-2">Submit Reading</span>
-            </button>
+            </button> 
             <button className="flex flex-col items-center p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
               <MessageSquare className="w-8 h-8 text-orange-600" />
               <span className="text-gray-900 dark:text-white mt-2">Log Query</span>
