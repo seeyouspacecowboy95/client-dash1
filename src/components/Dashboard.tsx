@@ -59,7 +59,7 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
           </div>
 
           {/* Quick Actions */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
             <button className="flex flex-col items-center p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
               <FileText className="w-8 h-8 text-orange-600" />
               <span className="text-gray-900 dark:text-white mt-2">View Statement</span>
