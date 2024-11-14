@@ -42,7 +42,7 @@ export default function Sidebar({ isOpen, onClose, onLogout }: SidebarProps) {
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 <img
-                  src="https://raw.githubusercontent.com/twinbladeRoG/mohokare-municipality/main/logo.png"
+                  src="https://i.imgur.com/D3g8amU.png"
                   alt="Mohokare Municipality"
                   className="h-12 w-auto object-contain"
                 />
