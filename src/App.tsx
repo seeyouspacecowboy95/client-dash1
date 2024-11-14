@@ -81,7 +81,7 @@ function App() {
           <footer className="bg-gray-50 py-12">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="text-center text-gray-600">
-                <p>© 2024 Bolt. All rights reserved.</p>
+                <p>© 2024 Zimako Smart Digital Solutions. All rights reserved.</p>
               </div>
             </div>
           </footer>
