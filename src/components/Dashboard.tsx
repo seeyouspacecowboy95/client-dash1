@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FileText, CreditCard, Activity, MessageSquare } from 'lucide-react';
+import { FileText, CreditCard, Activity, MessageSquare, HandshakeIcon } from 'lucide-react';
 import { getGreeting, getSASTHour } from '../utils/timeUtils';
 import Sidebar from './Sidebar';
 
@@ -69,7 +69,7 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
               <span className="text-gray-900 dark:text-white mt-2">Settle Account</span>
             </button>
             <button className="flex flex-col items-center p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <CreditCard className="w-8 h-8 text-orange-600" />
+              <HandshakeIcon className="w-8 h-8 text-orange-600" />
               <span className="text-gray-900 dark:text-white mt-2">Payment Arrangement</span>
             </button>
             <button className="flex flex-col items-center p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
