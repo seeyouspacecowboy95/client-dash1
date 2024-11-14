@@ -30,7 +30,7 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
     { label: 'Due Date', value: '25 Nov 2024' },
     { label: 'Last Payment', value: 'R 500.00' },
     { label: 'Last Payment Date', value: '25 Oct 2024'},
-  {/* { label: 'Account Status', value: 'Active' }, */}
+    { label: 'Account Status', value: 'Active' },
   ];
 
   return (
