@@ -68,10 +68,10 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
               <CreditCard className="w-8 h-8 text-orange-600" />
               <span className="text-gray-900 dark:text-white mt-2">Settle Account</span>
             </button>
-            {/* <button className="flex flex-col items-center p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
+            <button className="flex flex-col items-center p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
               <CreditCard className="w-8 h-8 text-orange-600" />
               <span className="text-gray-900 dark:text-white mt-2">Payment Arrangement</span>
-            </button> */}
+            </button>
             <button className="flex flex-col items-center p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
               <Activity className="w-8 h-8 text-orange-600" />
               <span className="text-gray-900 dark:text-white mt-2">Submit Reading</span>
