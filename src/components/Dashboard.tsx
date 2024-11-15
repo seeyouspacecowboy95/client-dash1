@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FileText, CreditCard, Activity, MessageSquare, Menu } from 'lucide-react';
+import { FileText, CreditCard, Activity, MessageSquare, Menu, HandshakeIcon } from 'lucide-react';
 import { getGreeting, getSASTHour } from '../utils/timeUtils';
 import Sidebar from './Sidebar';
 
@@ -59,7 +59,7 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6 mb-8">
             {stats.map((stat, index) => (
               <div key={index} className="bg-white dark:bg-dark-card p-4 sm:p-6 rounded-lg shadow-sm">
                 <p className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</p>
@@ -76,7 +76,11 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
             </button>
             <button className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
               <CreditCard className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600" />
-              <span className="text-sm sm:text-base text-gray-900 dark:text-white mt-2">Make Payment</span>
+              <span className="text-sm sm:text-base text-gray-900 dark:text-white mt-2">Settle Account</span>
+            </button>
+            <button className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <HandshakeIcon className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600" />
+              <span className="text-sm sm:text-base text-gray-900 dark:text-white mt-2">Payment Arrangement</span>
             </button>
             <button className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
               <Activity className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600" />
