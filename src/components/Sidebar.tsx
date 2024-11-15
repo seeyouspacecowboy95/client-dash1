@@ -58,7 +58,7 @@ export default function Sidebar({ isOpen, onClose, onLogout, onNavigate }: Sideb
                 {isDark ? (
                   <Sun className="w-5 h-5 text-theme" />
                 ) : (
-                  <Moon className="w-5 h-5 text-gray-600" />
+                  <Moon className="w-5 h-5 text-theme" />
                 )}
               </button>
             </div>

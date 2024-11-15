@@ -24,6 +24,20 @@
   color: var(--theme-color);
 }
 
+.focus\:ring-theme:focus {
+  --tw-ring-color: var(--theme-color);
+  --tw-ring-opacity: 0.5;
+}
+
+.bg-theme {
+  background-color: var(--theme-color);
+}
+
+select option {
+  color: inherit;
+  background-color: inherit;
+}
+
 @layer base {
   input {
     @apply px-3 py-2 border rounded-md;
