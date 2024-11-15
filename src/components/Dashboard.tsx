@@ -69,7 +69,7 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
           </div>
 
           {/* Quick Actions */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 sm:gap-6">
             <button className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
               <FileText className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600" />
               <span className="text-sm sm:text-base text-gray-900 dark:text-white mt-2">View Statement</span>
