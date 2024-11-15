@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sun, Moon, LayoutDashboard, User, FileText, CreditCard, Activity, MessageSquare, LogOut } from 'lucide-react';
+import { Sun, Moon, LayoutDashboard, User, FileText, CreditCard, Activity, MessageSquare, LogOut, Settings } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
 interface SidebarProps {
@@ -18,6 +18,7 @@ export default function Sidebar({ isOpen, onClose, onLogout }: SidebarProps) {
     { icon: <CreditCard className="w-5 h-5" />, label: 'Payment', path: '#' },
     { icon: <Activity className="w-5 h-5" />, label: 'Meter Readings', path: '#' },
     { icon: <MessageSquare className="w-5 h-5" />, label: 'Query', path: '#' },
+    { icon: <Settings className="w-5 h-5" />, label: 'Settings', path: '#' },
   ];
 
   return (
