@@ -4,13 +4,14 @@ import Hero from './components/Hero';
 import Features from './components/Features';
 import Dashboard from './components/Dashboard';
 import SuperAdminDashboard from './components/SuperAdminDashboard';
+import AdminDashboard from './components/AdminDashboard';
 import LoadingSpinner from './components/LoadingSpinner';
 import { ThemeProvider } from './contexts/ThemeContext';
 
 interface User {
   email: string;
   name: string;
-  role: 'user' | 'superadmin';
+  role: 'user' | 'superadmin' | 'admin';
 }
 
 const USERS: Record<string, User> = {
@@ -23,6 +24,11 @@ const USERS: Record<string, User> = {
     email: 'mudau@zimako.co.za',
     name: 'Mudau',
     role: 'superadmin'
+  },
+  'admin@zimako.co.za': {
+    email: 'admin@zimako.co.za',
+    name: 'Admin',
+    role: 'admin'
   }
 };
 
@@ -61,6 +67,12 @@ function App() {
       ) : isLoggedIn && currentUser ? (
         currentUser.role === 'superadmin' ? (
           <SuperAdminDashboard onLogout={handleLogout} />
+        ) : currentUser.role === 'admin' ? (
+          <AdminDashboard
+            onLogout={handleLogout}
+            userEmail={currentUser.email}
+            userName={currentUser.name}
+          />
         ) : (
           <Dashboard
             onLogout={handleLogout}

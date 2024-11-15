@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
+import { validateCredentials } from '../utils/auth';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -26,11 +27,11 @@ export default function AuthModal({
     e.preventDefault();
     setError('');
 
-    if ((email === 'tshepang@zimako.co.za' || email === 'mudau@zimako.co.za') && password === '12345678') {
+    if (validateCredentials({ email, password })) {
       onLoginSuccess(email);
       onClose();
     } else {
-      setError('Invalid account credentials');
+      setError('Invalid email or password');
     }
   };
 
@@ -48,14 +49,13 @@ export default function AuthModal({
   if (!isOpen) return null;
 
   const welcomeMessage = (
-    <div className="bg-orange-50 p-6 rounded-lg">
-      <h3 className="text-xl font-bold text-orange-900 mb-4">Welcome to Mohokare Municipality</h3>
-      <p className="text-orange-800 mb-4">Access your municipal services with ease:</p>
-      <ul className="space-y-2 text-orange-700">
-        <li>✓ Check your municipal statement</li>
-        <li>✓ Pay your account</li>
-        <li>✓ Submit meter readings</li>
-        <li>✓ Log queries online</li>
+    <div className="bg-theme/10 p-6 rounded-lg">
+      <h3 className="text-xl font-bold text-theme mb-4">Welcome to Zimako Smart Digital Solutions</h3>
+      <p className="text-gray-800 mb-4">Access your services with ease:</p>
+      <ul className="space-y-2 text-gray-700">
+        <li>✓ Manage your digital solutions</li>
+        <li>✓ Access analytics and reports</li>
+        <li>✓ Monitor system performance</li>
         <li>✓ Available 24/7 for your convenience</li>
       </ul>
     </div>
@@ -87,7 +87,7 @@ export default function AuthModal({
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme focus:ring-theme"
                       placeholder="Enter your email"
                     />
                   </div>
@@ -97,13 +97,13 @@ export default function AuthModal({
                       type="password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme focus:ring-theme"
                       placeholder="Enter your password"
                     />
                   </div>
                   <button
                     type="submit"
-                    className="w-full bg-orange-600 text-white py-2 px-4 rounded-lg hover:bg-orange-700 transition-colors"
+                    className="w-full bg-theme text-white py-2 px-4 rounded-lg hover:opacity-90 transition-opacity"
                   >
                     Login
                   </button>
@@ -112,7 +112,7 @@ export default function AuthModal({
                   Don't have an account?{' '}
                   <button
                     onClick={() => setView('signup')}
-                    className="text-orange-600 hover:text-orange-800"
+                    className="text-theme hover:opacity-90"
                   >
                     Sign up
                   </button>
@@ -128,7 +128,7 @@ export default function AuthModal({
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme focus:ring-theme"
                       placeholder="Enter your full name"
                       required
                     />
@@ -139,35 +139,8 @@ export default function AuthModal({
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme focus:ring-theme"
                       placeholder="Enter your email"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">ID Number</label>
-                    <input
-                      type="text"
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
-                      placeholder="Enter your ID number"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Cellphone Number</label>
-                    <input
-                      type="tel"
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
-                      placeholder="Enter your cellphone number"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Account Number</label>
-                    <input
-                      type="text"
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
-                      placeholder="Enter your account number"
                       required
                     />
                   </div>
@@ -177,23 +150,14 @@ export default function AuthModal({
                       type="password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme focus:ring-theme"
                       placeholder="Create a password"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Confirm Password</label>
-                    <input
-                      type="password"
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
-                      placeholder="Confirm your password"
                       required
                     />
                   </div>
                   <button
                     type="submit"
-                    className="w-full bg-orange-600 text-white py-2 px-4 rounded-lg hover:bg-orange-700 transition-colors"
+                    className="w-full bg-theme text-white py-2 px-4 rounded-lg hover:opacity-90 transition-opacity"
                   >
                     Sign Up
                   </button>
@@ -202,7 +166,7 @@ export default function AuthModal({
                   Already have an account?{' '}
                   <button
                     onClick={() => setView('login')}
-                    className="text-orange-600 hover:text-orange-800"
+                    className="text-theme hover:opacity-90"
                   >
                     Login
                   </button>
