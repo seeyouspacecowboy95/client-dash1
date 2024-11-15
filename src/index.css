@@ -2,6 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --theme-color-orange: rgb(234, 88, 12);
+  --theme-color-blue: rgba(39, 200, 245, 0.8);
+  --theme-color: var(--theme-color-orange);
+}
+
+:root[data-theme-color="blue"] {
+  --theme-color: var(--theme-color-blue);
+}
+
+.text-theme {
+  color: var(--theme-color);
+}
+
+.hover\:text-theme:hover {
+  color: var(--theme-color);
+}
+
+.group-hover\:text-theme {
+  color: var(--theme-color);
+}
+
 @layer base {
   input {
     @apply px-3 py-2 border rounded-md;

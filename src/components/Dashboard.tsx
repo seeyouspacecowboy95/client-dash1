@@ -57,23 +57,23 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
 
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 sm:gap-6">
               <button className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <FileText className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600" />
+                <FileText className="w-6 h-6 sm:w-8 sm:h-8 text-theme" />
                 <span className="text-sm sm:text-base text-gray-900 dark:text-white mt-2">View Statement</span>
               </button>
               <button className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <CreditCard className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600" />
+                <CreditCard className="w-6 h-6 sm:w-8 sm:h-8 text-theme" />
                 <span className="text-sm sm:text-base text-gray-900 dark:text-white mt-2">Settle Account</span>
               </button>
               <button className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <HandshakeIcon className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600" />
+                <HandshakeIcon className="w-6 h-6 sm:w-8 sm:h-8 text-theme" />
                 <span className="text-sm sm:text-base text-gray-900 dark:text-white mt-2">Make Arrangement</span>
               </button>
               <button className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <Activity className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600" />
+                <Activity className="w-6 h-6 sm:w-8 sm:h-8 text-theme" />
                 <span className="text-sm sm:text-base text-gray-900 dark:text-white mt-2">Submit Reading</span>
               </button>
               <button className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <MessageSquare className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600" />
+                <MessageSquare className="w-6 h-6 sm:w-8 sm:h-8 text-theme" />
                 <span className="text-sm sm:text-base text-gray-900 dark:text-white mt-2">Log Query</span>
               </button>
             </div>
