@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FileText, CreditCard, Activity, MessageSquare, HandshakeIcon } from 'lucide-react';
+import { FileText, CreditCard, Activity, MessageSquare, Menu } from 'lucide-react';
 import { getGreeting, getSASTHour } from '../utils/timeUtils';
 import Sidebar from './Sidebar';
 
@@ -28,57 +28,63 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
   const stats = [
     { label: 'Current Balance', value: 'R 2,450.00' },
     { label: 'Due Date', value: '25 Nov 2024' },
-    { label: 'Last Payment', value: 'R 500.00' },
-    { label: 'Last Payment Date', value: '25 Oct 2024'},
-    { label: 'Account Status', value: 'Active' },
+    { label: 'Last Payment', value: 'R 580.00' },
+    { label: 'Last Payment Date', value: '25 Oct 2024' },
+    { label: 'Account Status', value: 'Active'}
   ];
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-dark-bg">
+      {/* Mobile Menu Button */}
+      <div className="lg:hidden fixed top-4 left-4 z-50">
+        <button
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          className="p-2 rounded-lg bg-white dark:bg-dark-card shadow-md"
+        >
+          <Menu className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+        </button>
+      </div>
+
       <Sidebar
         isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}
         onLogout={onLogout}
       />
 
-      <main className="lg:ml-64">
-        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <main className="lg:ml-64 transition-all duration-300">
+        <div className="max-w-7xl mx-auto p-4 sm:px-6 lg:px-8">
           {/* Greeting */}
-          <div className="mb-8">
-            <h1 className="text-lg font-bold text-gray-900 dark:text-white">{greeting}</h1>
+          <div className="mb-8 mt-16 lg:mt-0">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">{greeting}</h1>
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
             {stats.map((stat, index) => (
-              <div key={index} className="bg-white dark:bg-dark-card p-6 rounded-lg shadow-sm">
-                <p className="text-xs text-gray-600 dark:text-gray-400">{stat.label}</p>
-                <p className="text-lg font-semibold text-gray-900 dark:text-white">{stat.value}</p>
+              <div key={index} className="bg-white dark:bg-dark-card p-4 sm:p-6 rounded-lg shadow-sm">
+                <p className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</p>
+                <p className="text-lg sm:text-2xl font-semibold text-gray-900 dark:text-white">{stat.value}</p>
               </div>
             ))}
           </div>
 
           {/* Quick Actions */}
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-            <button className="flex flex-col items-center p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <FileText className="w-4 h-4 text-orange-600" />
-              <span className="text-xs text-gray-900 dark:text-white mt-2">View Statement</span>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
+            <button className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <FileText className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600" />
+              <span className="text-sm sm:text-base text-gray-900 dark:text-white mt-2">View Statement</span>
             </button>
-            <button className="flex flex-col items-center p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <CreditCard className="w-4 h-4 text-orange-600" />
-              <span className="text-xs text-gray-900 dark:text-white mt-2">Settle Account</span>
+            <button className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <CreditCard className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600" />
+              <span className="text-sm sm:text-base text-gray-900 dark:text-white mt-2">Make Payment</span>
             </button>
-            <button className="flex flex-col items-center p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <HandshakeIcon className="w-4 h-4 text-orange-600" />
-              <span className="text-xs text-gray-900 dark:text-white mt-2">Payment Arrangement</span>
+            <button className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <Activity className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600" />
+              <span className="text-sm sm:text-base text-gray-900 dark:text-white mt-2">Submit Reading</span>
             </button>
-            <button className="flex flex-col items-center p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <Activity className="w-4 h-4 text-orange-600" />
-              <span className="text-xs text-gray-900 dark:text-white mt-2">Submit Reading</span>
-            </button> 
-            <button className="flex flex-col items-center p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <MessageSquare className="w-4 h-4 text-orange-600" />
-              <span className="text-xs text-gray-900 dark:text-white mt-2">Log Query</span>
+            <button className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <MessageSquare className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600" />
+              <span className="text-sm sm:text-base text-gray-900 dark:text-white mt-2">Log Query</span>
             </button>
           </div>
 
