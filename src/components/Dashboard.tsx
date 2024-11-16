@@ -3,6 +3,7 @@ import { FileText, CreditCard, Activity, MessageSquare, Menu, HandshakeIcon, Hel
 import { getGreeting, getSASTHour } from '../utils/timeUtils';
 import Sidebar from './Sidebar';
 import Settings from './Settings';
+import UserAccount from './UserAccount';
 
 interface DashboardProps {
   onLogout: () => void;
@@ -39,6 +40,22 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
     switch (currentView) {
       case 'settings':
         return <Settings />;
+      case 'account':
+        return (
+          <UserAccount
+            userName={userName}
+            accountNumber="035555666"
+            lastPaymentDate="25 Oct 2024"
+            lastAmountPaid="580.00"
+            arrangements={[
+              {
+                accountNumber: "035555666",
+                arrangementDate: "2024-03-15",
+                amountArranged: "1,200.00"
+              }
+            ]}
+          />
+        );
       default:
         return (
           <>
