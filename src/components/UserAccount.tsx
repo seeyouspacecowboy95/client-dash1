@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Calendar, DollarSign, Phone, Mail } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -12,12 +12,16 @@ interface UserAccountProps {
     arrangementDate: string;
     amountArranged: string;
   }[];
-}
-
-interface CommunicationPreferences {
-  sms: { enabled: boolean; value: string };
-  whatsapp: { enabled: boolean; value: string };
-  email: { enabled: boolean; value: string };
+  preferences: {
+    sms: { enabled: boolean; value: string };
+    whatsapp: { enabled: boolean; value: string };
+    email: { enabled: boolean; value: string };
+  };
+  onPreferencesSave: (preferences: {
+    sms: { enabled: boolean; value: string };
+    whatsapp: { enabled: boolean; value: string };
+    email: { enabled: boolean; value: string };
+  }) => void;
 }
 
 export default function UserAccount({
@@ -25,16 +29,18 @@ export default function UserAccount({
   accountNumber = '035555666',
   lastPaymentDate,
   lastAmountPaid,
-  arrangements = []
+  arrangements = [],
+  preferences,
+  onPreferencesSave
 }: UserAccountProps) {
-  const [preferences, setPreferences] = useState<CommunicationPreferences>({
-    sms: { enabled: false, value: '' },
-    whatsapp: { enabled: false, value: '' },
-    email: { enabled: false, value: '' }
-  });
+  const [localPreferences, setLocalPreferences] = React.useState(preferences);
 
-  const handlePreferenceChange = (type: keyof CommunicationPreferences, field: 'enabled' | 'value', value: boolean | string) => {
-    setPreferences(prev => ({
+  React.useEffect(() => {
+    setLocalPreferences(preferences);
+  }, [preferences]);
+
+  const handlePreferenceChange = (type: 'sms' | 'whatsapp' | 'email', field: 'enabled' | 'value', value: boolean | string) => {
+    setLocalPreferences(prev => ({
       ...prev,
       [type]: {
         ...prev[type],
@@ -44,6 +50,7 @@ export default function UserAccount({
   };
 
   const handleSavePreferences = () => {
+    onPreferencesSave(localPreferences);
     toast.success('Preferences Saved', {
       duration: 5000,
       style: {
@@ -117,7 +124,7 @@ export default function UserAccount({
             <div className="flex items-center h-5">
               <input
                 type="checkbox"
-                checked={preferences.sms.enabled}
+                checked={localPreferences.sms.enabled}
                 onChange={(e) => handlePreferenceChange('sms', 'enabled', e.target.checked)}
                 className="w-4 h-4 text-theme border-gray-300 rounded focus:ring-theme"
               />
@@ -129,11 +136,11 @@ export default function UserAccount({
               </label>
               <input
                 type="tel"
-                value={preferences.sms.value}
+                value={localPreferences.sms.value}
                 onChange={(e) => handlePreferenceChange('sms', 'value', e.target.value)}
                 placeholder="Enter mobile number"
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme focus:ring focus:ring-theme focus:ring-opacity-50"
-                disabled={!preferences.sms.enabled}
+                disabled={!localPreferences.sms.enabled}
               />
             </div>
           </div>
@@ -143,7 +150,7 @@ export default function UserAccount({
             <div className="flex items-center h-5">
               <input
                 type="checkbox"
-                checked={preferences.whatsapp.enabled}
+                checked={localPreferences.whatsapp.enabled}
                 onChange={(e) => handlePreferenceChange('whatsapp', 'enabled', e.target.checked)}
                 className="w-4 h-4 text-theme border-gray-300 rounded focus:ring-theme"
               />
@@ -155,11 +162,11 @@ export default function UserAccount({
               </label>
               <input
                 type="tel"
-                value={preferences.whatsapp.value}
+                value={localPreferences.whatsapp.value}
                 onChange={(e) => handlePreferenceChange('whatsapp', 'value', e.target.value)}
                 placeholder="Enter WhatsApp number"
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme focus:ring focus:ring-theme focus:ring-opacity-50"
-                disabled={!preferences.whatsapp.enabled}
+                disabled={!localPreferences.whatsapp.enabled}
               />
             </div>
           </div>
@@ -169,7 +176,7 @@ export default function UserAccount({
             <div className="flex items-center h-5">
               <input
                 type="checkbox"
-                checked={preferences.email.enabled}
+                checked={localPreferences.email.enabled}
                 onChange={(e) => handlePreferenceChange('email', 'enabled', e.target.checked)}
                 className="w-4 h-4 text-theme border-gray-300 rounded focus:ring-theme"
               />
@@ -181,11 +188,11 @@ export default function UserAccount({
               </label>
               <input
                 type="email"
-                value={preferences.email.value}
+                value={localPreferences.email.value}
                 onChange={(e) => handlePreferenceChange('email', 'value', e.target.value)}
                 placeholder="Enter email address"
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme focus:ring focus:ring-theme focus:ring-opacity-50"
-                disabled={!preferences.email.enabled}
+                disabled={!localPreferences.email.enabled}
               />
             </div>
           </div>

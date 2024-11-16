@@ -11,10 +11,32 @@ interface DashboardProps {
   userName: string;
 }
 
+interface RecentActivity {
+  type: string;
+  description: string;
+  date: string;
+}
+
+interface CommunicationPreferences {
+  sms: { enabled: boolean; value: string };
+  whatsapp: { enabled: boolean; value: string };
+  email: { enabled: boolean; value: string };
+}
+
 export default function Dashboard({ onLogout, userEmail, userName }: DashboardProps) {
   const [greeting, setGreeting] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [currentView, setCurrentView] = useState('dashboard');
+  const [recentActivities, setRecentActivities] = useState<RecentActivity[]>([
+    { type: 'Payment', description: 'Payment Received - R 500.00', date: '15 Mar 2024' },
+    { type: 'Meter', description: 'Meter Reading Submitted - Reading: 1234 kWh', date: '10 Mar 2024' },
+    { type: 'Statement', description: 'March 2024 Statement Generated', date: '1 Mar 2024' }
+  ]);
+  const [preferences, setPreferences] = useState<CommunicationPreferences>({
+    sms: { enabled: false, value: '' },
+    whatsapp: { enabled: false, value: '' },
+    email: { enabled: false, value: '' }
+  });
 
   useEffect(() => {
     const updateGreeting = () => {
@@ -27,6 +49,26 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
 
     return () => clearInterval(interval);
   }, [userName]);
+
+  const handlePreferencesSave = (newPreferences: CommunicationPreferences) => {
+    setPreferences(newPreferences);
+    
+    // Get today's date in the format "DD MMM YYYY"
+    const today = new Date().toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
+
+    // Add new activity to the beginning of the list
+    const newActivity = {
+      type: 'Preferences',
+      description: 'Communication Preferences Updated',
+      date: today
+    };
+
+    setRecentActivities(prev => [newActivity, ...prev]);
+  };
 
   const stats = [
     { label: 'Current Balance', value: 'R 2,450.00' },
@@ -54,6 +96,8 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
                 amountArranged: "1,200.00"
               }
             ]}
+            preferences={preferences}
+            onPreferencesSave={handlePreferencesSave}
           />
         );
       default:
@@ -72,7 +116,7 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
               ))}
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 sm:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 sm:gap-6 mb-8">
               <button className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <FileText className="w-6 h-6 sm:w-8 sm:h-8 text-theme" />
                 <span className="text-sm sm:text-base text-gray-900 dark:text-white mt-2">View Statement</span>
@@ -103,18 +147,12 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Activity</h2>
               <div className="bg-white dark:bg-dark-card shadow-sm rounded-lg">
                 <div className="divide-y divide-gray-200 dark:divide-gray-700">
-                  <div className="p-4">
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Payment Received</p>
-                    <p className="text-gray-900 dark:text-white">R 500.00 - 15 Mar 2024</p>
-                  </div>
-                  <div className="p-4">
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Meter Reading Submitted</p>
-                    <p className="text-gray-900 dark:text-white">Reading: 1234 kWh - 10 Mar 2024</p>
-                  </div>
-                  <div className="p-4">
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Statement Generated</p>
-                    <p className="text-gray-900 dark:text-white">March 2024 Statement - 1 Mar 2024</p>
-                  </div>
+                  {recentActivities.map((activity, index) => (
+                    <div key={index} className="p-4">
+                      <p className="text-sm text-gray-600 dark:text-gray-400">{activity.type}</p>
+                      <p className="text-gray-900 dark:text-white">{activity.description} - {activity.date}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
