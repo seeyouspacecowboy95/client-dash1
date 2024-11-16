@@ -7,6 +7,7 @@ import UserAccount from './UserAccount';
 import MeterReadings from './MeterReadings';
 import QueryForm from './QueryForm';
 import Payment from './Payment';
+import Statement from './Statement';
 
 interface DashboardProps {
   onLogout: () => void;
@@ -113,6 +114,8 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
             onPreferencesSave={handlePreferencesSave}
           />
         );
+      case 'statements':
+        return <Statement />;
       case 'readings':
         return <MeterReadings />;
       case 'query':
@@ -136,7 +139,10 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 sm:gap-6 mb-8">
-              <button className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <button 
+                onClick={() => setCurrentView('statements')}
+                className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow"
+              >
                 <FileText className="w-6 h-6 sm:w-8 sm:h-8 text-theme" />
                 <span className="text-sm sm:text-base text-gray-900 dark:text-white mt-2">View Statement</span>
               </button>
@@ -168,7 +174,10 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
                 <MessageSquare className="w-6 h-6 sm:w-8 sm:h-8 text-theme" />
                 <span className="text-sm sm:text-base text-gray-900 dark:text-white mt-2">Log Query</span>
               </button>
-              <button className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <button
+                onClick={navigateToQuery}
+                className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow"
+              >
                 <UserPlus className="w-6 h-6 sm:w-8 sm:h-8 text-theme" />
                 <span className="text-sm sm:text-base text-gray-900 dark:text-white mt-2">Apply for Indigent</span>
               </button>
