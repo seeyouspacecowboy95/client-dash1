@@ -6,6 +6,7 @@ import Settings from './Settings';
 import UserAccount from './UserAccount';
 import MeterReadings from './MeterReadings';
 import QueryForm from './QueryForm';
+import Payment from './Payment';
 
 interface DashboardProps {
   onLogout: () => void;
@@ -78,6 +79,10 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
     setCurrentView('query');
   };
 
+  const navigateToPayment = () => {
+    setCurrentView('payment');
+  };
+
   const stats = [
     { label: 'Current Balance', value: 'R 2,450.00' },
     { label: 'Due Date', value: '25 Nov 2024' },
@@ -112,6 +117,8 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
         return <MeterReadings />;
       case 'query':
         return <QueryForm />;
+      case 'payment':
+        return <Payment />;
       default:
         return (
           <>
@@ -133,11 +140,17 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
                 <FileText className="w-6 h-6 sm:w-8 sm:h-8 text-theme" />
                 <span className="text-sm sm:text-base text-gray-900 dark:text-white mt-2">View Statement</span>
               </button>
-              <button className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <button 
+                onClick={navigateToPayment}
+                className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow"
+              >
                 <CreditCard className="w-6 h-6 sm:w-8 sm:h-8 text-theme" />
                 <span className="text-sm sm:text-base text-gray-900 dark:text-white mt-2">Settle Account</span>
               </button>
-              <button className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <button 
+                onClick={navigateToPayment}
+                className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow"
+              >
                 <HandshakeIcon className="w-6 h-6 sm:w-8 sm:h-8 text-theme" />
                 <span className="text-sm sm:text-base text-gray-900 dark:text-white mt-2">Make Arrangement</span>
               </button>
@@ -215,7 +228,7 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
               rel="noopener noreferrer"
               className="hover:text-blue-800 dark:hover:text-blue-400 transition-colors"
             >
-              Zimako Smart Digital Solutions
+              Zimako Group
             </a>
           </div>
           <div className="text-sm text-gray-500 dark:text-gray-400">
