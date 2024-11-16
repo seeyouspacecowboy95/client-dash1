@@ -5,6 +5,7 @@ import Sidebar from './Sidebar';
 import Settings from './Settings';
 import UserAccount from './UserAccount';
 import MeterReadings from './MeterReadings';
+import QueryForm from './QueryForm';
 
 interface DashboardProps {
   onLogout: () => void;
@@ -73,6 +74,10 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
     setCurrentView('readings');
   };
 
+  const navigateToQuery = () => {
+    setCurrentView('query');
+  };
+
   const stats = [
     { label: 'Current Balance', value: 'R 2,450.00' },
     { label: 'Due Date', value: '25 Nov 2024' },
@@ -105,6 +110,8 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
         );
       case 'readings':
         return <MeterReadings />;
+      case 'query':
+        return <QueryForm />;
       default:
         return (
           <>
@@ -141,7 +148,10 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
                 <Activity className="w-6 h-6 sm:w-8 sm:h-8 text-theme" />
                 <span className="text-sm sm:text-base text-gray-900 dark:text-white mt-2">Submit Reading</span>
               </button>
-              <button className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <button
+                onClick={navigateToQuery}
+                className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow"
+              >
                 <MessageSquare className="w-6 h-6 sm:w-8 sm:h-8 text-theme" />
                 <span className="text-sm sm:text-base text-gray-900 dark:text-white mt-2">Log Query</span>
               </button>
