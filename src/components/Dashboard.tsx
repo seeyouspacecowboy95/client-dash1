@@ -180,7 +180,7 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-dark-bg">
+    <div className="min-h-screen bg-gray-50 dark:bg-dark-bg flex flex-col">
       <div className="lg:hidden fixed top-4 left-4 z-50">
         <button
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -197,11 +197,32 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
         onNavigate={(view) => setCurrentView(view)}
       />
 
-      <main className="lg:ml-64 transition-all duration-300">
+      <main className="lg:ml-64 transition-all duration-300 flex-grow">
         <div className="max-w-7xl mx-auto p-4 sm:px-6 lg:px-8">
           {renderContent()}
         </div>
       </main>
+
+      <hr className="border-t border-gray-200 dark:border-gray-700 mt-8" />
+      
+      <footer className="lg:ml-64 py-4 px-6 bg-white dark:bg-dark-card shadow-sm">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <div className="text-sm text-gray-600 dark:text-gray-400">
+            Powered By: {' '}
+            <a 
+              href="https://zimako.co.za/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:text-blue-800 dark:hover:text-blue-400 transition-colors"
+            >
+              Zimako Smart Digital Solutions
+            </a>
+          </div>
+          <div className="text-sm text-gray-500 dark:text-gray-400">
+            Version 1.0.0
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
