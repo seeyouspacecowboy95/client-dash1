@@ -4,6 +4,7 @@ import { getGreeting, getSASTHour } from '../utils/timeUtils';
 import Sidebar from './Sidebar';
 import Settings from './Settings';
 import UserAccount from './UserAccount';
+import MeterReadings from './MeterReadings';
 
 interface DashboardProps {
   onLogout: () => void;
@@ -53,14 +54,12 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
   const handlePreferencesSave = (newPreferences: CommunicationPreferences) => {
     setPreferences(newPreferences);
     
-    // Get today's date in the format "DD MMM YYYY"
     const today = new Date().toLocaleDateString('en-GB', {
       day: '2-digit',
       month: 'short',
       year: 'numeric'
     });
 
-    // Add new activity to the beginning of the list
     const newActivity = {
       type: 'Preferences',
       description: 'Communication Preferences Updated',
@@ -68,6 +67,10 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
     };
 
     setRecentActivities(prev => [newActivity, ...prev]);
+  };
+
+  const navigateToReadings = () => {
+    setCurrentView('readings');
   };
 
   const stats = [
@@ -100,6 +103,8 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
             onPreferencesSave={handlePreferencesSave}
           />
         );
+      case 'readings':
+        return <MeterReadings />;
       default:
         return (
           <>
@@ -129,7 +134,10 @@ export default function Dashboard({ onLogout, userEmail, userName }: DashboardPr
                 <HandshakeIcon className="w-6 h-6 sm:w-8 sm:h-8 text-theme" />
                 <span className="text-sm sm:text-base text-gray-900 dark:text-white mt-2">Make Arrangement</span>
               </button>
-              <button className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <button
+                onClick={navigateToReadings}
+                className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-dark-card rounded-lg shadow-sm hover:shadow-md transition-shadow"
+              >
                 <Activity className="w-6 h-6 sm:w-8 sm:h-8 text-theme" />
                 <span className="text-sm sm:text-base text-gray-900 dark:text-white mt-2">Submit Reading</span>
               </button>
