@@ -8,8 +8,10 @@ import {
   Gauge,
   Settings,
   Menu,
-  X
+  X,
+  LogOut
 } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
 
 interface SidebarItem {
   name: string;
@@ -20,6 +22,8 @@ interface SidebarItem {
 interface AdminSidebarProps {
   onNavigate: (view: string) => void;
   currentView: string;
+  onLogout: () => void;
+  userName: string;
 }
 
 const sidebarItems: SidebarItem[] = [
@@ -32,32 +36,39 @@ const sidebarItems: SidebarItem[] = [
   { name: 'Settings', icon: <Settings className="w-5 h-5" />, view: 'settings' },
 ];
 
-function AdminSidebar({ onNavigate, currentView }: AdminSidebarProps) {
+function AdminSidebar({ onNavigate, currentView, onLogout, userName }: AdminSidebarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
+
+  const toggleTheme = () => {
+    setIsDarkTheme(!isDarkTheme);
+    document.documentElement.classList.toggle('dark');
+  };
 
   return (
     <>
       <button
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-md bg-white shadow-md"
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-md bg-white dark:bg-dark-card shadow-md"
       >
-        {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        {isMobileMenuOpen ? <X className="w-6 h-6 dark:text-dark-text-primary" /> : <Menu className="w-6 h-6 dark:text-dark-text-primary" />}
       </button>
 
       <div
-        className={`fixed inset-y-0 left-0 z-40 w-64 bg-white shadow-lg transform transition-transform duration-200 ease-in-out lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-dark-card shadow-lg transform transition-transform duration-200 ease-in-out lg:translate-x-0 flex flex-col ${
           isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="p-4 border-b">
+        <div className="p-4 border-b dark:border-dark-border flex items-center justify-between">
           <img
             src="https://i.imgur.com/rX38gBh.png"
             alt="Zimako Logo"
-            className="h-12 w-auto mx-auto"
+            className="h-12 w-auto"
           />
+          <ThemeToggle isDark={isDarkTheme} onToggle={toggleTheme} />
         </div>
 
-        <nav className="mt-6 px-3">
+        <nav className="mt-6 px-3 flex-grow">
           <ul className="space-y-1">
             {sidebarItems.map((item) => (
               <li key={item.name}>
@@ -68,17 +79,27 @@ function AdminSidebar({ onNavigate, currentView }: AdminSidebarProps) {
                   }}
                   className={`w-full flex items-center px-4 py-3 rounded-md transition-colors ${
                     currentView === item.view
-                      ? 'bg-theme/10 text-theme'
-                      : 'text-gray-700 hover:bg-theme/10 hover:text-theme'
+                      ? 'text-theme dark:text-theme-dark'
+                      : 'text-gray-700 dark:text-dark-text-primary hover:text-theme dark:hover:text-theme-dark'
                   }`}
                 >
-                  <span className={currentView === item.view ? 'text-theme' : ''}>{item.icon}</span>
+                  <span className="text-theme dark:text-theme-dark">{item.icon}</span>
                   <span className="ml-3">{item.name}</span>
                 </button>
               </li>
             ))}
           </ul>
         </nav>
+
+        <div className="border-t dark:border-dark-border p-4">
+          <button
+            onClick={onLogout}
+            className="w-full flex items-center px-4 py-3 rounded-md text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
+          >
+            <LogOut className="w-5 h-5" />
+            <span className="ml-3">Logout</span>
+          </button>
+        </div>
       </div>
 
       {isMobileMenuOpen && (
