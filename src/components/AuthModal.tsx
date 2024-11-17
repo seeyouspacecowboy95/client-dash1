@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import { validateCredentials } from '../utils/auth';
 import ForgotPasswordForm from './ForgotPasswordForm';
+import AccountNumberInput from './AccountNumberInput';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -54,6 +55,7 @@ export default function AuthModal({
     password: '',
     confirmPassword: ''
   });
+  const [isAccountValid, setIsAccountValid] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
@@ -82,7 +84,7 @@ export default function AuthModal({
           ? 'Invalid cellphone number'
           : '';
       case 'accountNumber':
-        return !value ? 'Account number is required' : '';
+        return !value ? 'Account number is required' : !isAccountValid ? 'Invalid account number' : '';
       case 'password':
         return !value
           ? 'Password is required'
@@ -112,6 +114,15 @@ export default function AuthModal({
     }));
   };
 
+  const handleAccountNumberChange = (value: string, isValid: boolean) => {
+    setFormData(prev => ({ ...prev, accountNumber: value }));
+    setIsAccountValid(isValid);
+    setErrors(prev => ({
+      ...prev,
+      accountNumber: validateField('accountNumber', value)
+    }));
+  };
+
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -125,7 +136,7 @@ export default function AuthModal({
 
     setErrors(newErrors);
 
-    if (Object.keys(newErrors).length === 0) {
+    if (Object.keys(newErrors).length === 0 && isAccountValid) {
       onNewUserSignup(formData.email, formData.fullName);
       setView('login');
       setFormData({
@@ -153,7 +164,6 @@ export default function AuthModal({
   };
 
   const handleResetRequest = (email: string) => {
-    // Here you would integrate with Firebase Auth
     console.log('Password reset requested for:', email);
   };
 
@@ -305,22 +315,11 @@ export default function AuthModal({
                       )}
                     </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Account Number</label>
-                      <input
-                        type="text"
-                        name="accountNumber"
-                        value={formData.accountNumber}
-                        onChange={handleInputChange}
-                        className={`mt-1 block w-full rounded-md shadow-sm focus:ring-theme focus:border-theme ${
-                          errors.accountNumber ? 'border-red-500' : 'border-gray-300'
-                        }`}
-                        placeholder="Enter your account number"
-                      />
-                      {errors.accountNumber && (
-                        <p className="mt-1 text-sm text-red-500">{errors.accountNumber}</p>
-                      )}
-                    </div>
+                    <AccountNumberInput
+                      value={formData.accountNumber}
+                      onChange={handleAccountNumberChange}
+                      error={errors.accountNumber}
+                    />
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700">Password</label>
