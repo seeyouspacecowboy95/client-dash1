@@ -117,13 +117,13 @@ export default function Statement() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div className="bg-gray-50 dark:bg-dark-hover p-4 rounded-lg">
-          <p className="text-sm text-gray-500 dark:text-gray-400">Total Debits</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Outstanding Balance</p>
           <p className="text-xl font-semibold text-red-600">
             R {metrics.totalDebits.toFixed(2)}
           </p>
         </div>
         <div className="bg-gray-50 dark:bg-dark-hover p-4 rounded-lg">
-          <p className="text-sm text-gray-500 dark:text-gray-400">Total Credits</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Previous Month Balance</p>
           <p className="text-xl font-semibold text-green-600">
             R {metrics.totalCredits.toFixed(2)}
           </p>
