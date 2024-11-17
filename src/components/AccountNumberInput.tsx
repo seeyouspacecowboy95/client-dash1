@@ -16,27 +16,36 @@ export default function AccountNumberInput({ value, onChange, error }: AccountNu
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
 
-    if (value) {
-      setIsValidating(true);
-      setShowStatus(false);
+    const validateInput = () => {
+      if (value) {
+        setIsValidating(true);
+        setShowStatus(false);
 
-      timeoutId = setTimeout(() => {
-        const profiles = getStoredProfiles();
-        const valid = validateAccountNumber(value, profiles);
-        setIsValid(valid);
-        setIsValidating(false);
-        setShowStatus(true);
-        onChange(value, valid);
-      }, 500);
-    } else {
-      setShowStatus(false);
-      onChange(value, false);
-    }
+        timeoutId = setTimeout(() => {
+          const valid = validateAccountNumber(value);
+          setIsValid(valid);
+          setIsValidating(false);
+          setShowStatus(true);
+          onChange(value, valid);
+        }, 500);
+      } else {
+        setShowStatus(false);
+        setIsValid(false);
+        onChange(value, false);
+      }
+    };
+
+    validateInput();
 
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
     };
   }, [value, onChange]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value.trim();
+    onChange(newValue, false);
+  };
 
   return (
     <div>
@@ -45,7 +54,7 @@ export default function AccountNumberInput({ value, onChange, error }: AccountNu
         <input
           type="text"
           value={value}
-          onChange={(e) => onChange(e.target.value, false)}
+          onChange={handleInputChange}
           className={`block w-full pr-10 rounded-md shadow-sm ${
             error ? 'border-red-500' : 'border-gray-300'
           } focus:ring-theme focus:border-theme`}
