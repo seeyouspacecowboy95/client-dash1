@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { doc, collection, addDoc, onSnapshot, updateDoc } from 'firebase/firestore';
+import { db } from '../firebaseConfig'; // Adjust the import path based on your project structure
 import AdminSidebar from './AdminSidebar';
 import AccountsView from './AccountsView';
 import CreateProfileModal from './CreateProfileModal';
@@ -27,34 +29,50 @@ function AdminDashboard({ onLogout, userEmail, userName }: AdminDashboardProps) 
   const [isCreateProfileModalOpen, setIsCreateProfileModalOpen] = useState(false);
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
-  const [profiles, setProfiles] = useState<Profile[]>(() => {
-    const savedProfiles = localStorage.getItem('clientProfiles');
-    return savedProfiles ? JSON.parse(savedProfiles) : [];
-  });
+  const [profiles, setProfiles] = useState<Profile[]>([]);
 
-  const handleCreateProfile = (profileData: Omit<Profile, 'id' | 'createdAt'>) => {
-    const newProfile: Profile = {
-      ...profileData,
-      id: crypto.randomUUID(),
-      createdAt: new Date().toISOString()
-    };
+  // Fetch profiles from Firestore on mount
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, 'profiles'), (snapshot) => {
+      const fetchedProfiles = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Profile[];
+      setProfiles(fetchedProfiles);
+    });
 
-    const updatedProfiles = [...profiles, newProfile];
-    setProfiles(updatedProfiles);
-    localStorage.setItem('clientProfiles', JSON.stringify(updatedProfiles));
+    return () => unsubscribe();
+  }, []);
+
+  // Add a new profile to Firestore
+  const handleCreateProfile = async (profileData: Omit<Profile, 'id' | 'createdAt'>) => {
+    try {
+      await addDoc(collection(db, 'profiles'), {
+        ...profileData,
+        createdAt: new Date().toISOString(),
+      });
+      setIsCreateProfileModalOpen(false);
+    } catch (error) {
+      console.error('Error adding profile:', error);
+    }
   };
 
+  // Open the Edit Profile Modal
   const handleEditProfile = (profile: Profile) => {
     setSelectedProfile(profile);
     setIsEditProfileModalOpen(true);
   };
 
-  const handleSaveProfile = (updatedProfile: Profile) => {
-    const updatedProfiles = profiles.map(profile =>
-      profile.id === updatedProfile.id ? updatedProfile : profile
-    );
-    setProfiles(updatedProfiles);
-    localStorage.setItem('clientProfiles', JSON.stringify(updatedProfiles));
+  // Save profile updates to Firestore
+  const handleSaveProfile = async (updatedProfile: Profile) => {
+    try {
+      const profileRef = doc(db, 'profiles', updatedProfile.id);
+      await updateDoc(profileRef, { ...updatedProfile });
+      setIsEditProfileModalOpen(false);
+      setSelectedProfile(null);
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
   };
 
   return (
