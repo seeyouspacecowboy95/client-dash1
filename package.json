@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@tanstack/react-table": "^8.20.5",
+    "@tremor/react": "^3.18.4",
     "date-fns": "^4.1.0",
     "firebase": "^11.0.2",
     "jspdf": "^2.5.2",
@@ -20,7 +21,8 @@
     "react-datepicker": "^7.5.0",
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.1",
-    "react-loading-skeleton": "^3.4.0"
+    "react-loading-skeleton": "^3.4.0",
+    "recharts": "^2.12.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
