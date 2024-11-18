@@ -10,11 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroicons/react": "^2.1.5",
     "@tanstack/react-table": "^8.20.5",
     "@tremor/react": "^3.18.4",
     "date-fns": "^4.1.0",
     "firebase": "^11.0.2",
     "jspdf": "^2.5.2",
+    "jspdf-autotable": "^3.8.4",
     "lucide-react": "^0.344.0",
     "react": "^18.3.1",
     "react-date-range": "^2.0.1",

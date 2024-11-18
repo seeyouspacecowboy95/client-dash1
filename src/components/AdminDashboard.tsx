@@ -6,6 +6,7 @@ import AccountsView from './AccountsView';
 import CreateProfileModal from './CreateProfileModal';
 import EditProfileModal from './EditProfileModal';
 import DashboardOverview from './analytics/DashboardOverview';
+import AdminReports from './AdminReports';
 
 interface Profile {
   id: string;
@@ -76,6 +77,8 @@ function AdminDashboard({ onLogout, userEmail, userName }: AdminDashboardProps) 
     switch (currentView) {
       case 'dashboard':
         return <DashboardOverview />;
+      case 'reports':
+        return <AdminReports />;
       case 'accounts':
         return (
           <AccountsView
