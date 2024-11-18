@@ -3,43 +3,51 @@
 @tailwind utilities;
 
 :root {
+  /* Theme Colors */
   --theme-color-orange: rgb(234, 88, 12);
   --theme-color-blue: rgba(39, 200, 245, 0.8);
   --theme-color: var(--theme-color-orange);
+  
+  /* Tremor Colors */
+  --tr-color-primary: #3b82f6;
+  --tr-color-secondary: #6b7280;
 }
 
 :root[data-theme-color="blue"] {
   --theme-color: var(--theme-color-blue);
 }
 
-.text-theme {
-  color: var(--theme-color);
-}
-
-.hover\:text-theme:hover {
-  color: var(--theme-color);
-}
-
-.group-hover\:text-theme {
-  color: var(--theme-color);
-}
-
-.focus\:ring-theme:focus {
-  --tw-ring-color: var(--theme-color);
-  --tw-ring-opacity: 0.5;
-}
-
-.bg-theme {
-  background-color: var(--theme-color);
-}
-
-select option {
-  color: inherit;
-  background-color: inherit;
-}
-
 @layer base {
   input {
     @apply px-3 py-2 border rounded-md;
   }
+}
+
+@layer utilities {
+  .text-theme {
+    color: var(--theme-color);
+  }
+
+  .hover\:text-theme:hover {
+    color: var(--theme-color);
+  }
+
+  .group-hover\:text-theme {
+    color: var(--theme-color);
+  }
+
+  .focus\:ring-theme:focus {
+    --tw-ring-color: var(--theme-color);
+    --tw-ring-opacity: 0.5;
+  }
+
+  .bg-theme {
+    background-color: var(--theme-color);
+  }
+}
+
+/* Form Element Styles */
+select option {
+  color: inherit;
+  background-color: inherit;
 }

@@ -5,6 +5,7 @@ import AdminSidebar from './AdminSidebar';
 import AccountsView from './AccountsView';
 import CreateProfileModal from './CreateProfileModal';
 import EditProfileModal from './EditProfileModal';
+import DashboardOverview from './analytics/DashboardOverview';
 
 interface Profile {
   id: string;
@@ -71,6 +72,31 @@ function AdminDashboard({ onLogout, userEmail, userName }: AdminDashboardProps) 
     }
   };
 
+  const renderCurrentView = () => {
+    switch (currentView) {
+      case 'dashboard':
+        return <DashboardOverview />;
+      case 'accounts':
+        return (
+          <AccountsView
+            profiles={profiles}
+            onCreateProfile={() => setIsCreateProfileModalOpen(true)}
+            onEditProfile={handleEditProfile}
+          />
+        );
+      default:
+        return (
+          <div className="px-4 py-6 sm:px-0">
+            <div className="border-4 border-dashed border-gray-200 dark:border-dark-border rounded-lg h-96 flex items-center justify-center">
+              <p className="text-gray-500 dark:text-dark-text-secondary text-xl">
+                {currentView.charAt(0).toUpperCase() + currentView.slice(1)} Content
+              </p>
+            </div>
+          </div>
+        );
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-dark-bg">
       <AdminSidebar 
@@ -82,19 +108,7 @@ function AdminDashboard({ onLogout, userEmail, userName }: AdminDashboardProps) 
       
       <div className="lg:ml-64">
         <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-          {currentView === 'accounts' ? (
-            <AccountsView
-              profiles={profiles}
-              onCreateProfile={() => setIsCreateProfileModalOpen(true)}
-              onEditProfile={handleEditProfile}
-            />
-          ) : (
-            <div className="px-4 py-6 sm:px-0">
-              <div className="border-4 border-dashed border-gray-200 dark:border-dark-border rounded-lg h-96 flex items-center justify-center">
-                <p className="text-gray-500 dark:text-dark-text-secondary text-xl">Admin Dashboard Content</p>
-              </div>
-            </div>
-          )}
+          {renderCurrentView()}
         </main>
       </div>
 

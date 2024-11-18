@@ -1,17 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Card,
-  Metric,
-  Text,
-  AreaChart,
-  Title,
-  TabGroup,
-  TabList,
-  Tab,
-} from '@tremor/react';
+import { Card, Metric, Text, AreaChart, Title, TabGroup, TabList, Tab } from '@tremor/react';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
-import { format, subDays } from 'date-fns';
+import { format, subDays, subMonths } from 'date-fns';
 
 interface MetricData {
   newUsers: number;
@@ -28,6 +19,9 @@ const timeRanges = [
   { key: '12m', label: '12M', days: 365 },
 ];
 
+const valueFormatter = (number: number) => 
+  `R ${Intl.NumberFormat("en-ZA").format(number).toString()}`;
+
 export default function DashboardMetrics() {
   const [metrics, setMetrics] = useState<MetricData>({
     newUsers: 0,
@@ -39,42 +33,21 @@ export default function DashboardMetrics() {
   const [chartData, setChartData] = useState<any[]>([]);
 
   useEffect(() => {
-    // Real-time metrics listener
-    const metricsRef = collection(db, 'metrics');
-    const unsubscribe = onSnapshot(metricsRef, (snapshot) => {
-      const data = snapshot.docs[0]?.data() as MetricData;
-      setMetrics(
-        data || {
-          newUsers: 0,
-          totalCustomers: 0,
-          activeServices: 0,
-          revenueCollected: 0,
-        }
-      );
+    // Simulated data for demonstration
+    const simulatedData = Array.from({ length: 30 }, (_, i) => ({
+      date: format(subDays(new Date(), 29 - i), 'MMM dd'),
+      Users: Math.floor(Math.random() * 100) + 50,
+      Services: Math.floor(Math.random() * 200) + 100,
+      Revenue: Math.floor(Math.random() * 50000) + 10000,
+    }));
+
+    setChartData(simulatedData);
+    setMetrics({
+      newUsers: 156,
+      totalCustomers: 2489,
+      activeServices: 1876,
+      revenueCollected: 234567,
     });
-
-    return () => unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    // Fetch time-series data based on selected range
-    const range = timeRanges.find((r) => r.key === selectedRange)!;
-    const startDate = subDays(new Date(), range.days);
-
-    const timeseriesRef = collection(db, 'timeseries');
-    const timeQuery = query(timeseriesRef, where('date', '>=', startDate));
-
-    const unsubscribe = onSnapshot(timeQuery, (snapshot) => {
-      const data = snapshot.docs.map((doc) => ({
-        date: format(doc.data().date.toDate(), 'MMM dd'),
-        users: doc.data().users,
-        services: doc.data().services,
-        revenue: doc.data().revenue,
-      }));
-      setChartData(data);
-    });
-
-    return () => unsubscribe();
   }, [selectedRange]);
 
   return (
@@ -94,20 +67,17 @@ export default function DashboardMetrics() {
         </Card>
         <Card decoration="top" decorationColor="blue">
           <Text>Revenue Collected</Text>
-          <Metric>R {metrics.revenueCollected.toLocaleString()}</Metric>
+          <Metric>{valueFormatter(metrics.revenueCollected)}</Metric>
         </Card>
       </div>
 
       <Card>
         <div className="flex justify-between items-center mb-4">
           <Title>Service Performance Trends</Title>
-          <TabGroup>
+          <TabGroup value={selectedRange} onValueChange={setSelectedRange}>
             <TabList variant="solid">
               {timeRanges.map((range) => (
-                <Tab
-                  key={range.key}
-                  onClick={() => setSelectedRange(range.key)}
-                >
+                <Tab key={range.key} value={range.key}>
                   {range.label}
                 </Tab>
               ))}
@@ -118,8 +88,14 @@ export default function DashboardMetrics() {
           className="h-72 mt-4"
           data={chartData}
           index="date"
-          categories={['users', 'services', 'revenue']}
-          colors={['indigo', 'orange', 'blue']}
+          categories={["Users", "Services", "Revenue"]}
+          colors={["indigo", "orange", "blue"]}
+          valueFormatter={valueFormatter}
+          showLegend={true}
+          showGridLines={true}
+          showYAxis={true}
+          showXAxis={true}
+          startEndOnly={false}
         />
       </Card>
     </div>
