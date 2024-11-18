@@ -9,6 +9,7 @@ import DashboardOverview from './analytics/DashboardOverview';
 import AdminReports from './AdminReports';
 import AdminPaymentReminder from './AdminPaymentReminder';
 import QueryManagement from './QueryManagement';
+import AdminMeterReadings from './AdminMeterReadings';
 
 interface Profile {
   id: string;
@@ -93,6 +94,8 @@ function AdminDashboard({ onLogout, userEmail, userName }: AdminDashboardProps) 
         return <AdminPaymentReminder />;
       case 'queries':
         return <QueryManagement />;
+      case 'meters':
+        return <AdminMeterReadings />;
       default:
         return (
           <div className="px-4 py-6 sm:px-0">
