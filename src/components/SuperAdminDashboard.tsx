@@ -1,5 +1,6 @@
 import React from 'react';
-import { Users, DollarSign, FileText, Activity, MessageSquare, HandshakeIcon, LogOut } from 'lucide-react';
+import { Users, DollarSign, FileText, Activity, MessageSquare, HandshakeIcon } from 'lucide-react';
+import SuperAdminNav from './SuperAdminNav';
 
 interface DashboardCardProps {
   icon: React.ReactNode;
@@ -67,23 +68,8 @@ export default function SuperAdminDashboard({ onLogout }: { onLogout: () => void
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <span className="text-2xl font-bold text-orange-600">Super Admin Dashboard</span>
-            </div>
-            <button
-              onClick={onLogout}
-              className="flex items-center space-x-2 text-gray-600 hover:text-orange-600"
-            >
-              <LogOut size={18} />
-              <span>Logout</span>
-            </button>
-          </div>
-        </div>
-      </nav>
-
+      <SuperAdminNav onLogout={onLogout} />
+      
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {dashboardData.map((item, index) => (
