@@ -3,10 +3,8 @@ import { Card, Title, DonutChart } from '@tremor/react';
 import MessageDistributionChart from './MessageDistributionChart';
 
 interface MessageMetrics {
-  name: string;
-  sms: number;
-  email: number;
-  whatsapp: number;
+  channel: string;
+  value: number;
 }
 
 const valueFormatter = (number: number) => 
@@ -25,24 +23,9 @@ export default function ServiceDeliveryTracker() {
   useEffect(() => {
     // Simulated data for demonstration
     setMessageMetrics([
-      {
-        name: 'SMS',
-        sms: 245,
-        email: 50,
-        whatsapp: 12,
-      },
-      {
-        name: 'Email',
-        sms: 320,
-        email: 45,
-        whatsapp: 8,
-      },
-      {
-        name: 'WhatsApp',
-        sms: 180,
-        email: 30,
-        whatsapp: 15,
-      },
+      { channel: 'SMS', value: 245 },
+      { channel: 'Email', value: 320 },
+      { channel: 'WhatsApp', value: 180 },
     ]);
 
     setUtilityStats([

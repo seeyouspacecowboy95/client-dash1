@@ -11,7 +11,7 @@ interface ViewModalProps {
 
 function ViewModal({ reading, onClose }: ViewModalProps) {
   return (
-    <div className="relative max-h-[90vh] flex flex-col">
+    <div className="relative max-h-[90vh] flex flex-col w-full mx-auto">
       {/* Fixed header with close button */}
       <div className="sticky top-0 z-10 bg-white dark:bg-gray-900 pt-2 pb-4">
         <button

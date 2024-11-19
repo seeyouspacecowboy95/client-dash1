@@ -2,10 +2,8 @@ import React from 'react';
 import { BarChart } from '@tremor/react';
 
 interface MessageMetrics {
-  name: string;
-  sms: number;
-  email: number;
-  whatsapp: number;
+  channel: string;
+  value: number;
 }
 
 interface Props {
@@ -20,11 +18,10 @@ const MessageDistributionChart: React.FC<Props> = ({ data }) => {
     <BarChart
       className="mt-6 h-72"
       data={data}
-      index="name"
-      categories={["sms", "email", "whatsapp"]}
+      index="channel"
+      categories={["value"]}
       colors={["blue-500", "emerald-500", "purple-500"]}
       valueFormatter={valueFormatter}
-      stack={false}
       showLegend={false}
       showGridLines={true}
       showYAxis={true}

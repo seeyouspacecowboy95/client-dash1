@@ -173,7 +173,7 @@ function AdminMeterReadings() {
       <Modal
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}
-        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-900 rounded-lg shadow-xl p-6 w-full max-w-4xl max-h-[90vh] transition-opacity duration-300"
+        className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-900 rounded-lg shadow-xl p-6 w-full max-w-4xl max-h-[90vh] overflow-hidden"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300"
         closeTimeoutMS={300}
       >
