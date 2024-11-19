@@ -15,7 +15,8 @@ import {
   Palette,
   FileText,
   Plus,
-  Image
+  Image,
+  History
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -64,6 +65,7 @@ const navigation: NavItem[] = [
     href: '#',
     items: [
       { name: 'Documentation', icon: <FileText className="w-5 h-5" />, href: '/docs' },
+      { name: 'Changelog', icon: <History className="w-5 h-5" />, href: '/changelog' },
       { name: 'Support', icon: <HelpCircle className="w-5 h-5" />, href: '/support' },
     ]
   },
