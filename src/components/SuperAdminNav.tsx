@@ -4,7 +4,7 @@ import {
   Home, 
   Layout, 
   Mail, 
-  HelpCircle, 
+  Settings,
   Bell, 
   Sun, 
   Moon,
@@ -12,10 +12,9 @@ import {
   Menu as MenuIcon,
   X,
   ChevronDown,
-  Palette,
   FileText,
-  Plus,
-  Image
+  Box,
+  Layers
 } from 'lucide-react';
 
 interface NavItem {
@@ -29,21 +28,22 @@ const navigation: NavItem[] = [
   { name: 'Home', icon: <Home className="w-5 h-5" />, href: '/' },
   {
     name: 'Interface',
-    icon: <Palette className="w-5 h-5" />,
+    icon: <Box className="w-5 h-5" />,
     href: '#',
     items: [
-      { name: 'Colors', icon: <Palette className="w-5 h-5" />, href: '/colors' },
-      { name: 'Typography', icon: <FileText className="w-5 h-5" />, href: '/typography' },
+      { name: 'Components', icon: <Layers className="w-5 h-5" />, href: '/components' },
+      { name: 'Cards', icon: <Layout className="w-5 h-5" />, href: '/cards' },
+      { name: 'Buttons', icon: <Box className="w-5 h-5" />, href: '/buttons' }
     ]
   },
   { name: 'Form Elements', icon: <FileText className="w-5 h-5" />, href: '/forms' },
   {
     name: 'Extra',
-    icon: <Plus className="w-5 h-5" />,
+    icon: <Box className="w-5 h-5" />,
     href: '#',
     items: [
       { name: 'Charts', icon: <FileText className="w-5 h-5" />, href: '/charts' },
-      { name: 'Tables', icon: <FileText className="w-5 h-5" />, href: '/tables' },
+      { name: 'Tables', icon: <Layout className="w-5 h-5" />, href: '/tables' }
     ]
   },
   {
@@ -52,20 +52,19 @@ const navigation: NavItem[] = [
     href: '#',
     items: [
       { name: 'Grid', icon: <Layout className="w-5 h-5" />, href: '/grid' },
-      { name: 'Flex', icon: <Layout className="w-5 h-5" />, href: '/flex' },
+      { name: 'Containers', icon: <Box className="w-5 h-5" />, href: '/containers' }
     ]
   },
   { name: 'Emails', icon: <Mail className="w-5 h-5" />, href: '/emails' },
-  { name: 'Illustrations', icon: <Image className="w-5 h-5" />, href: '/illustrations' },
   {
-    name: 'Help',
-    icon: <HelpCircle className="w-5 h-5" />,
+    name: 'Settings',
+    icon: <Settings className="w-5 h-5" />,
     href: '#',
     items: [
-      { name: 'Documentation', icon: <FileText className="w-5 h-5" />, href: '/docs' },
-      { name: 'Support', icon: <HelpCircle className="w-5 h-5" />, href: '/support' },
+      { name: 'General', icon: <Settings className="w-5 h-5" />, href: '/settings/general' },
+      { name: 'Security', icon: <Settings className="w-5 h-5" />, href: '/settings/security' }
     ]
-  },
+  }
 ];
 
 interface SuperAdminNavProps {
@@ -81,7 +80,7 @@ const SuperAdminNav: React.FC<SuperAdminNavProps> = ({ onLogout }) => {
 
   return (
     <div className="bg-white shadow-lg">
-      {/* Header */}
+      {/* Top Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           {/* Branding */}
@@ -147,7 +146,7 @@ const SuperAdminNav: React.FC<SuperAdminNavProps> = ({ onLogout }) => {
               </Transition>
             </Menu>
 
-            {/* Mobile Menu */}
+            {/* Mobile Menu Toggle */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="md:hidden p-2"
@@ -158,8 +157,105 @@ const SuperAdminNav: React.FC<SuperAdminNavProps> = ({ onLogout }) => {
         </div>
       </div>
 
-      {/* Navigation */}
-      {/* Desktop and Mobile code remain unchanged */}
+      {/* Horizontal Navigation */}
+      <div className="border-t border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <nav className="hidden md:flex h-12">
+            {navigation.map((item) => (
+              item.items ? (
+                <Menu as="div" className="relative inline-block text-left" key={item.name}>
+                  <Menu.Button className="inline-flex items-center h-12 px-4 text-sm font-medium text-gray-700 hover:text-orange-600 hover:bg-gray-50">
+                    {item.icon}
+                    <span className="ml-2">{item.name}</span>
+                    <ChevronDown className="ml-1 w-4 h-4" />
+                  </Menu.Button>
+                  <Transition
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <Menu.Items className="absolute left-0 mt-1 w-48 bg-white shadow-lg rounded-md py-1 ring-1 ring-black ring-opacity-5">
+                      {item.items.map((subItem) => (
+                        <Menu.Item key={subItem.name}>
+                          {({ active }) => (
+                            <a
+                              href={subItem.href}
+                              className={`${
+                                active ? 'bg-gray-100' : ''
+                              } flex px-4 py-2 text-sm text-gray-700`}
+                            >
+                              {subItem.icon}
+                              <span className="ml-2">{subItem.name}</span>
+                            </a>
+                          )}
+                        </Menu.Item>
+                      ))}
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
+              ) : (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className="inline-flex items-center h-12 px-4 text-sm font-medium text-gray-700 hover:text-orange-600 hover:bg-gray-50"
+                >
+                  {item.icon}
+                  <span className="ml-2">{item.name}</span>
+                </a>
+              )
+            ))}
+          </nav>
+        </div>
+      </div>
+
+      {/* Mobile Navigation */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden">
+          <div className="pt-2 pb-3 space-y-1">
+            {navigation.map((item) => (
+              <div key={item.name}>
+                {item.items ? (
+                  <Menu as="div" className="w-full">
+                    <Menu.Button className="w-full flex items-center px-4 py-2 text-sm font-medium text-gray-700">
+                      {item.icon}
+                      <span className="ml-2">{item.name}</span>
+                      <ChevronDown className="ml-auto w-4 h-4" />
+                    </Menu.Button>
+                    <Menu.Items className="ml-4">
+                      {item.items.map((subItem) => (
+                        <Menu.Item key={subItem.name}>
+                          {({ active }) => (
+                            <a
+                              href={subItem.href}
+                              className={`${
+                                active ? 'bg-gray-100' : ''
+                              } flex px-4 py-2 text-sm text-gray-700`}
+                            >
+                              {subItem.icon}
+                              <span className="ml-2">{subItem.name}</span>
+                            </a>
+                          )}
+                        </Menu.Item>
+                      ))}
+                    </Menu.Items>
+                  </Menu>
+                ) : (
+                  <a
+                    href={item.href}
+                    className="flex items-center px-4 py-2 text-sm font-medium text-gray-700"
+                  >
+                    {item.icon}
+                    <span className="ml-2">{item.name}</span>
+                  </a>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
