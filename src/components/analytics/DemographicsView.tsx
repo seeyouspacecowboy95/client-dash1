@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Card, Title, DonutChart, BarChart } from '@tremor/react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
+
+const Chart = lazy(() => import('react-apexcharts'));
 
 interface DemographicData {
   ageGroups: { name: string; value: number }[];
@@ -7,11 +8,9 @@ interface DemographicData {
   servicePreferences: { name: string; value: number }[];
 }
 
-const valueFormatter = (number: number) => `${number}%`;
-
 const DISTRIBUTION_INDICATORS = [
-  { name: 'Accounts', color: 'bg-blue-500' },
-  { name: 'Book Value', color: 'bg-emerald-500' },
+  { name: 'Accounts', color: '#3b82f6' },
+  { name: 'Book Value', color: '#10b981' },
 ];
 
 export default function DemographicsView() {
@@ -22,7 +21,6 @@ export default function DemographicsView() {
   });
 
   useEffect(() => {
-    // Simulated data for demonstration
     setDemographics({
       ageGroups: [
         { name: '18-24', value: 15 },
@@ -34,9 +32,9 @@ export default function DemographicsView() {
       geographicData: [
         {
           category: 'Distribution',
-          'Accounts': 65,
+          Accounts: 65,
           'Book Value': 78,
-        }
+        },
       ],
       servicePreferences: [
         { name: 'Online Services', value: 45 },
@@ -46,77 +44,132 @@ export default function DemographicsView() {
     });
   }, []);
 
+  const ageChartOptions = {
+    chart: { type: 'donut', height: 350 },
+    labels: demographics.ageGroups.map(item => item.name),
+    colors: ['#64748b', '#8b5cf6', '#4f46e5', '#f43f5e', '#06b6d4'],
+    legend: { position: 'bottom' },
+    responsive: [
+      {
+        breakpoint: 480,
+        options: {
+          chart: { width: 200 },
+          legend: { position: 'bottom' },
+        },
+      },
+    ],
+  };
+
+  const distributionChartOptions = {
+    chart: { type: 'bar', height: 350, toolbar: { show: false } },
+    plotOptions: { bar: { horizontal: false, columnWidth: '55%' } },
+    dataLabels: { enabled: false },
+    stroke: { show: true, width: 2, colors: ['transparent'] },
+    xaxis: { categories: ['Distribution'] },
+    yaxis: {
+      title: { text: 'Percentage (%)' },
+      min: 0,
+      max: 100,
+      tickAmount: 10,
+    },
+    fill: { opacity: 1 },
+    colors: ['#3b82f6', '#10b981'],
+    tooltip: { y: { formatter: (val: number) => `${val}%` } },
+  };
+
+  const serviceChartOptions = {
+    chart: { type: 'donut', height: 350 },
+    labels: demographics.servicePreferences.map(item => item.name),
+    colors: ['#3b82f6', '#06b6d4', '#4f46e5'],
+    legend: { position: 'bottom' },
+    responsive: [
+      {
+        breakpoint: 480,
+        options: {
+          chart: { width: 200 },
+          legend: { position: 'bottom' },
+        },
+      },
+    ],
+  };
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <Card>
-        <Title>Age Distribution</Title>
-        <DonutChart
-          className="mt-6 h-72"
-          data={demographics.ageGroups}
-          category="value"
-          index="name"
-          valueFormatter={valueFormatter}
-          colors={["slate", "violet", "indigo", "rose", "cyan"]}
-          showLabel={true}
-          showAnimation={true}
-        />
-      </Card>
+      <Suspense fallback={<div>Loading charts...</div>}>
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h3 className="text-lg font-semibold mb-4">Age Distribution</h3>
+          <Chart
+            options={ageChartOptions}
+            series={demographics.ageGroups.map(item => item.value)}
+            type="donut"
+            height={350}
+          />
+        </div>
 
-      <Card>
-        <div className="flex flex-col space-y-4">
-          <Title className="text-center">Accounts VS Book Value</Title>
-          <div className="flex items-center justify-center space-x-8">
-            {DISTRIBUTION_INDICATORS.map((indicator) => (
-              <div key={indicator.name} className="flex items-center">
-                <div className={`w-3 h-3 rounded-full ${indicator.color} mr-2`}></div>
-                <span className="text-sm font-medium">{indicator.name}</span>
-              </div>
-            ))}
+        <div className="bg-white p-6 rounded-lg shadow">
+          <div className="flex flex-col space-y-4">
+            <h3 className="text-lg font-semibold text-center">
+              Accounts VS Book Value
+            </h3>
+            <div className="flex items-center justify-center space-x-8">
+              {DISTRIBUTION_INDICATORS.map(indicator => (
+                <div key={indicator.name} className="flex items-center">
+                  <div
+                    className="w-3 h-3 rounded-full mr-2"
+                    style={{ backgroundColor: indicator.color }}
+                  ></div>
+                  <span className="text-sm font-medium">{indicator.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <Chart
+            options={distributionChartOptions}
+            series={[
+              {
+                name: 'Accounts',
+                data: [demographics.geographicData[0]?.Accounts || 0],
+              },
+              {
+                name: 'Book Value',
+                data: [demographics.geographicData[0]?.['Book Value'] || 0],
+              },
+            ]}
+            type="bar"
+            height={350}
+          />
+          <div className="flex justify-around mt-4">
+            <div className="text-center">
+              <span
+                className="text-sm font-semibold"
+                style={{ color: '#3b82f6' }}
+              >
+                {demographics.geographicData[0]?.Accounts}%
+              </span>
+              <p className="text-xs text-gray-600">Accounts</p>
+            </div>
+            <div className="text-center">
+              <span
+                className="text-sm font-semibold"
+                style={{ color: '#10b981' }}
+              >
+                {demographics.geographicData[0]?.['Book Value']}%
+              </span>
+              <p className="text-xs text-gray-600">Book Value</p>
+            </div>
           </div>
         </div>
-        <BarChart
-          className="mt-6 h-72"
-          data={demographics.geographicData}
-          index="category"
-          categories={["Accounts", "Book Value"]}
-          colors={["blue", "emerald"]}
-          valueFormatter={valueFormatter}
-          showLegend={false}
-          showGridLines={true}
-          startEndOnly={false}
-          minValue={0}
-          maxValue={100}
-          yAxisWidth={40}
-        />
-        <div className="flex justify-around mt-4">
-          <div className="text-center">
-            <span className="text-sm font-semibold text-blue-500">
-              {demographics.geographicData[0]?.Accounts}%
-            </span>
-            <p className="text-xs text-gray-600">Accounts</p>
-          </div>
-          <div className="text-center">
-            <span className="text-sm font-semibold text-emerald-500">
-              {demographics.geographicData[0]?.['Book Value']}%
-            </span>
-            <p className="text-xs text-gray-600">Book Value</p>
-          </div>
-        </div>
-      </Card>
 
-      <Card>
-        <Title>Service Preferences</Title>
-        <DonutChart
-          className="mt-6 h-72"
-          data={demographics.servicePreferences}
-          category="value"
-          index="name"
-          valueFormatter={valueFormatter}
-          colors={["blue", "cyan", "indigo"]}
-          showLabel={true}
-          showAnimation={true}
-        />
-      </Card>
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h3 className="text-lg font-semibold mb-4">Service Preferences</h3>
+          <Chart
+            options={serviceChartOptions}
+            series={demographics.servicePreferences.map(item => item.value)}
+            type="donut"
+            height={350}
+          />
+        </div>
+      </Suspense>
     </div>
   );
 }

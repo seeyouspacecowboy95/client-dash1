@@ -10,10 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.18",
     "@heroicons/react": "^2.1.5",
     "@tanstack/match-sorter-utils": "^8.11.8",
     "@tanstack/react-table": "^8.20.5",
-    "@tremor/react": "^3.18.4",
+    "apexcharts": "^3.54.1",
     "clsx": "^2.1.0",
     "date-fns": "^4.1.0",
     "firebase": "^11.0.2",
@@ -21,6 +22,7 @@
     "jspdf-autotable": "^3.8.4",
     "lucide-react": "^0.344.0",
     "react": "^18.3.1",
+    "react-apexcharts": "^1.5.0",
     "react-date-range": "^2.0.1",
     "react-datepicker": "^7.5.0",
     "react-dom": "^18.3.1",
@@ -28,8 +30,7 @@
     "react-image-zoom": "^1.3.1",
     "react-loading-skeleton": "^3.4.0",
     "react-modal": "^3.16.1",
-    "recharts": "^2.12.2",
-    "@headlessui/react": "^1.7.18"
+    "recharts": "^2.13.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",

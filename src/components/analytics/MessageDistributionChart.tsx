@@ -1,5 +1,6 @@
-import React from 'react';
-import { BarChart } from '@tremor/react';
+import React, { lazy, Suspense } from 'react';
+
+const Chart = lazy(() => import('react-apexcharts'));
 
 interface MessageMetrics {
   channel: string;
@@ -10,23 +11,62 @@ interface Props {
   data: MessageMetrics[];
 }
 
-const valueFormatter = (number: number) => 
-  Intl.NumberFormat("en-ZA").format(number).toString();
-
 const MessageDistributionChart: React.FC<Props> = ({ data }) => {
+  const options = {
+    chart: {
+      type: 'bar',
+      height: 350,
+      toolbar: {
+        show: false,
+      },
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: '55%',
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      show: true,
+      width: 2,
+      colors: ['transparent'],
+    },
+    xaxis: {
+      categories: data.map((item) => item.channel),
+    },
+    yaxis: {
+      title: {
+        text: 'Messages',
+      },
+    },
+    fill: {
+      opacity: 1,
+    },
+    colors: ['#3b82f6', '#10b981', '#8b5cf6'],
+    tooltip: {
+      y: {
+        formatter: (val: number) => val.toString(),
+      },
+    },
+  };
+
   return (
-    <BarChart
-      className="mt-6 h-72"
-      data={data}
-      index="channel"
-      categories={["value"]}
-      colors={["blue-500", "emerald-500", "purple-500"]}
-      valueFormatter={valueFormatter}
-      showLegend={false}
-      showGridLines={true}
-      showYAxis={true}
-      showXAxis={true}
-    />
+    <Suspense fallback={<div>Loading chart...</div>}>
+      <Chart
+        options={options}
+        series={[
+          {
+            name: 'Messages',
+            data: data.map((item) => item.value),
+          },
+        ]}
+        type="bar"
+        height={350}
+      />
+    </Suspense>
   );
 };
 
