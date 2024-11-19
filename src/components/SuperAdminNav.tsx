@@ -20,66 +20,86 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
+interface SuperAdminNavProps {
+  onLogout: () => void;
+  onViewChange: (view: 'dashboard' | 'changelog') => void;
+  currentView: 'dashboard' | 'changelog';
+}
+
 interface NavItem {
   name: string;
   icon: React.ReactNode;
   href: string;
   items?: NavItem[];
+  action?: () => void;
 }
 
-const navigation: NavItem[] = [
-  { name: 'Home', icon: <Home className="w-5 h-5" />, href: '/' },
-  {
-    name: 'Interface',
-    icon: <Palette className="w-5 h-5" />,
-    href: '#',
-    items: [
-      { name: 'Colors', icon: <Palette className="w-5 h-5" />, href: '/colors' },
-      { name: 'Typography', icon: <FileText className="w-5 h-5" />, href: '/typography' },
-    ]
-  },
-  { name: 'Form Elements', icon: <FileText className="w-5 h-5" />, href: '/forms' },
-  {
-    name: 'Extra',
-    icon: <Plus className="w-5 h-5" />,
-    href: '#',
-    items: [
-      { name: 'Charts', icon: <FileText className="w-5 h-5" />, href: '/charts' },
-      { name: 'Tables', icon: <FileText className="w-5 h-5" />, href: '/tables' },
-    ]
-  },
-  {
-    name: 'Layout',
-    icon: <Layout className="w-5 h-5" />,
-    href: '#',
-    items: [
-      { name: 'Grid', icon: <Layout className="w-5 h-5" />, href: '/grid' },
-      { name: 'Flex', icon: <Layout className="w-5 h-5" />, href: '/flex' },
-    ]
-  },
-  { name: 'Emails', icon: <Mail className="w-5 h-5" />, href: '/emails' },
-  { name: 'Illustrations', icon: <Image className="w-5 h-5" />, href: '/illustrations' },
-  {
-    name: 'Help',
-    icon: <HelpCircle className="w-5 h-5" />,
-    href: '#',
-    items: [
-      { name: 'Documentation', icon: <FileText className="w-5 h-5" />, href: '/docs' },
-      { name: 'Changelog', icon: <History className="w-5 h-5" />, href: '/changelog' },
-      { name: 'Support', icon: <HelpCircle className="w-5 h-5" />, href: '/support' },
-    ]
-  },
-];
-
-interface SuperAdminNavProps {
-  onLogout: () => void;
-}
-
-const SuperAdminNav: React.FC<SuperAdminNavProps> = ({ onLogout }) => {
+const SuperAdminNav: React.FC<SuperAdminNavProps> = ({ onLogout, onViewChange, currentView }) => {
   const { isDarkMode, toggleTheme, themeColor, setThemeColor } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [notifications] = useState(3);
   const [activeItem, setActiveItem] = useState('Home');
+
+  const navigation: NavItem[] = [
+    { 
+      name: 'Home', 
+      icon: <Home className="w-5 h-5" />, 
+      href: '#',
+      action: () => onViewChange('dashboard')
+    },
+    {
+      name: 'Interface',
+      icon: <Palette className="w-5 h-5" />,
+      href: '#',
+      items: [
+        { name: 'Colors', icon: <Palette className="w-5 h-5" />, href: '/colors' },
+        { name: 'Typography', icon: <FileText className="w-5 h-5" />, href: '/typography' },
+      ]
+    },
+    { name: 'Form Elements', icon: <FileText className="w-5 h-5" />, href: '/forms' },
+    {
+      name: 'Extra',
+      icon: <Plus className="w-5 h-5" />,
+      href: '#',
+      items: [
+        { name: 'Charts', icon: <FileText className="w-5 h-5" />, href: '/charts' },
+        { name: 'Tables', icon: <FileText className="w-5 h-5" />, href: '/tables' },
+      ]
+    },
+    {
+      name: 'Layout',
+      icon: <Layout className="w-5 h-5" />,
+      href: '#',
+      items: [
+        { name: 'Grid', icon: <Layout className="w-5 h-5" />, href: '/grid' },
+        { name: 'Flex', icon: <Layout className="w-5 h-5" />, href: '/flex' },
+      ]
+    },
+    { name: 'Emails', icon: <Mail className="w-5 h-5" />, href: '/emails' },
+    { name: 'Illustrations', icon: <Image className="w-5 h-5" />, href: '/illustrations' },
+    {
+      name: 'Help',
+      icon: <HelpCircle className="w-5 h-5" />,
+      href: '#',
+      items: [
+        { name: 'Documentation', icon: <FileText className="w-5 h-5" />, href: '/docs' },
+        { 
+          name: 'Changelog', 
+          icon: <History className="w-5 h-5" />, 
+          href: '#',
+          action: () => onViewChange('changelog')
+        },
+        { name: 'Support', icon: <HelpCircle className="w-5 h-5" />, href: '/support' },
+      ]
+    },
+  ];
+
+  const handleItemClick = (item: NavItem) => {
+    setActiveItem(item.name);
+    if (item.action) {
+      item.action();
+    }
+  };
 
   return (
     <div className="w-full">
@@ -229,7 +249,7 @@ const SuperAdminNav: React.FC<SuperAdminNavProps> = ({ onLogout }) => {
                 {({ open }) => (
                   <>
                     <Menu.Button
-                      onClick={() => setActiveItem(item.name)}
+                      onClick={() => handleItemClick(item)}
                       className={`inline-flex items-center px-1 h-12 text-sm font-medium relative
                         ${isDarkMode ? 'text-dark-text-primary hover:text-' + themeColor + '-400' : 'text-gray-900 hover:text-' + themeColor + '-600'}
                         transition-colors duration-200`}
@@ -270,11 +290,11 @@ const SuperAdminNav: React.FC<SuperAdminNavProps> = ({ onLogout }) => {
                           {item.items.map((subItem) => (
                             <Menu.Item key={subItem.name}>
                               {({ active }) => (
-                                <a
-                                  href={subItem.href}
+                                <button
+                                  onClick={() => subItem.action ? subItem.action() : null}
                                   className={`${
                                     active ? (isDarkMode ? 'bg-dark-hover' : `bg-${themeColor}-50`) : ''
-                                  } flex px-4 py-2 text-sm ${
+                                  } flex w-full px-4 py-2 text-sm ${
                                     isDarkMode ? 'text-dark-text-primary' : 'text-gray-700'
                                   } transition-colors duration-150`}
                                 >
@@ -282,7 +302,7 @@ const SuperAdminNav: React.FC<SuperAdminNavProps> = ({ onLogout }) => {
                                     className: `w-5 h-5 ${active ? `text-${themeColor}-500` : ''} transition-colors duration-150`
                                   })}
                                   <span className="ml-2">{subItem.name}</span>
-                                </a>
+                                </button>
                               )}
                             </Menu.Item>
                           ))}

@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronRight, Star, Bug, Zap, Trash2, Plus } from 'lucide-react';
 
 interface ChangeLogEntry {
   version: string;
   date: string;
+  featured?: boolean;
+  introMessage?: string; // Optional introductory message
   changes: {
     type: 'added' | 'fixed' | 'changed' | 'removed';
     description: string;
-    emoji?: string;
+    important?: boolean;
   }[];
 }
 
@@ -15,102 +19,183 @@ const changeLogData: ChangeLogEntry[] = [
   {
     version: '1.2.0',
     date: 'March 15, 2024',
+    featured: true,
     changes: [
-      { type: 'added', description: 'Dark mode support', emoji: '🌙' },
-      { type: 'added', description: 'New dashboard analytics', emoji: '📊' },
-      { type: 'fixed', description: 'Mobile navigation issues', emoji: '🔧' },
+      { type: 'added', description: 'Dark mode support with seamless transitions', important: true },
+      { type: 'added', description: 'Advanced dashboard analytics with real-time updates' },
+      { type: 'fixed', description: 'Mobile navigation responsiveness and touch interactions' },
+      { type: 'changed', description: 'Optimized database queries for faster performance' },
     ]
   },
   {
     version: '1.1.0',
     date: 'March 1, 2024',
     changes: [
-      { type: 'added', description: 'Theme color customization', emoji: '🎨' },
-      { type: 'changed', description: 'Improved performance', emoji: '⚡' },
-      { type: 'fixed', description: 'Data loading issues', emoji: '🐛' },
+      { type: 'added', description: 'Theme color customization with preset palettes', important: true },
+      { type: 'changed', description: 'Enhanced UI performance with React memo and useMemo' },
+      { type: 'fixed', description: 'Data loading and caching mechanisms' },
+      { type: 'removed', description: 'Legacy reporting system' },
     ]
   },
   {
-    version: '1.0.0',
-    date: 'February 15, 2024',
+    version: '1.0.0-beta',
+    date: 'November 19, 2024',
+    featured: true,
+    introMessage: "Initial beta release of Zimako Consumer v1.0! Lots more coming soon though 😁",
     changes: [
-      { type: 'added', description: 'Initial release', emoji: '🚀' },
-      { type: 'added', description: 'Basic dashboard features', emoji: '📱' },
-      { type: 'added', description: 'User authentication', emoji: '🔒' },
+      { type: 'added', description: 'Initial release with core functionality', important: true },
+      { type: 'added', description: 'Comprehensive dashboard with key metrics' },
+      { type: 'added', description: 'Secure user authentication and authorization' },
     ]
   }
 ];
 
 const ChangeLog: React.FC = () => {
   const { isDarkMode, themeColor } = useTheme();
+  const [expandedVersion, setExpandedVersion] = useState<string | null>(null);
 
-  const getTypeColor = (type: string) => {
+  const getTypeIcon = (type: string) => {
     switch (type) {
       case 'added':
-        return 'text-green-500';
+        return <Plus className="w-4 h-4" />;
       case 'fixed':
-        return 'text-blue-500';
+        return <Bug className="w-4 h-4" />;
       case 'changed':
-        return 'text-yellow-500';
+        return <Zap className="w-4 h-4" />;
       case 'removed':
-        return 'text-red-500';
+        return <Trash2 className="w-4 h-4" />;
       default:
-        return `text-${themeColor}-500`;
+        return null;
+    }
+  };
+
+  const getTypeStyles = (type: string) => {
+    switch (type) {
+      case 'added':
+        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
+      case 'fixed':
+        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
+      case 'changed':
+        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
+      case 'removed':
+        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
+      default:
+        return '';
     }
   };
 
   return (
-    <div className={`max-w-3xl mx-auto p-6 ${isDarkMode ? 'bg-dark-card' : 'bg-white'} rounded-lg shadow-sm`}>
-      <h1 className={`text-2xl font-bold mb-8 ${isDarkMode ? 'text-dark-text-primary' : 'text-gray-900'}`}>
-        Changelog
-      </h1>
-      
-      <div className="space-y-8">
-        {changeLogData.map((release, index) => (
-          <div key={index} className="relative">
-            {/* Version timeline connector */}
-            {index !== changeLogData.length - 1 && (
-              <div className={`absolute left-4 top-8 bottom-0 w-px ${isDarkMode ? 'bg-dark-border' : 'bg-gray-200'}`} />
-            )}
-            
-            <div className="flex items-start">
-              {/* Version badge */}
-              <div className={`flex-shrink-0 w-8 h-8 rounded-full ${isDarkMode ? `bg-${themeColor}-400` : `bg-${themeColor}-500`} flex items-center justify-center`}>
-                <span className="text-white text-sm">v{release.version.split('.')[0]}</span>
-              </div>
-              
-              <div className="ml-6">
-                {/* Version header */}
-                <div className="flex items-baseline">
-                  <h2 className={`text-lg font-semibold ${isDarkMode ? 'text-dark-text-primary' : 'text-gray-900'}`}>
-                    Version {release.version}
-                  </h2>
-                  <span className={`ml-4 text-sm ${isDarkMode ? 'text-dark-text-secondary' : 'text-gray-500'}`}>
-                    {release.date}
-                  </span>
+    <div className="max-w-4xl mx-auto">
+      <div className="mb-8 text-center">
+        <h1 className={`text-3xl font-bold ${isDarkMode ? 'text-dark-text-primary' : 'text-gray-900'}`}>
+          Changelog
+        </h1>
+        <p className={`mt-2 ${isDarkMode ? 'text-dark-text-secondary' : 'text-gray-600'}`}>
+          Track our progress and latest improvements
+        </p>
+      </div>
+
+      <div className="space-y-6">
+        {changeLogData.map((release) => (
+          <motion.div
+            key={release.version}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={`relative ${
+              isDarkMode ? 'bg-dark-card' : 'bg-white'
+            } rounded-lg shadow-sm overflow-hidden`}
+          >
+            {/* Version header */}
+            <button
+              onClick={() => setExpandedVersion(
+                expandedVersion === release.version ? null : release.version
+              )}
+              className={`w-full p-6 text-left transition-colors duration-200 ${
+                isDarkMode ? 'hover:bg-dark-hover' : 'hover:bg-gray-50'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  {release.featured && (
+                    <Star
+                      className={`w-5 h-5 text-gold animate-glow`}
+                      style={{ color: '#FFD700' }}
+                    />
+                  )}
+                  <div>
+                    <h2 className={`text-xl font-semibold ${
+                      isDarkMode ? 'text-dark-text-primary' : 'text-gray-900'
+                    }`}>
+                      Version {release.version}
+                    </h2>
+                    <p className={`text-sm ${
+                      isDarkMode ? 'text-dark-text-secondary' : 'text-gray-500'
+                    }`}>
+                      {release.date}
+                    </p>
+                  </div>
                 </div>
-                
-                {/* Changes list */}
-                <ul className="mt-4 space-y-3">
-                  {release.changes.map((change, changeIndex) => (
-                    <li key={changeIndex} className="flex items-start">
-                      <span className="mr-2 text-xl" role="img" aria-label={change.type}>
-                        {change.emoji}
-                      </span>
-                      <div>
-                        <span className={`inline-block px-2 py-0.5 text-xs font-medium rounded-full ${getTypeColor(change.type)} bg-opacity-10 capitalize`}>
-                          {change.type}
-                        </span>
-                        <span className={`ml-2 ${isDarkMode ? 'text-dark-text-primary' : 'text-gray-700'}`}>
-                          {change.description}
-                        </span>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
+                <motion.div
+                  animate={{ rotate: expandedVersion === release.version ? 90 : 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <ChevronRight className={`w-5 h-5 ${
+                    isDarkMode ? 'text-dark-text-secondary' : 'text-gray-400'
+                  }`} />
+                </motion.div>
               </div>
-            </div>
-          </div>
+            </button>
+
+            {/* Changes list */}
+            <AnimatePresence>
+              {expandedVersion === release.version && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <div className={`px-6 pb-6 ${
+                    isDarkMode ? 'border-t border-dark-border' : 'border-t border-gray-100'
+                  }`}>
+                    <div className="space-y-4 pt-4">
+                      {release.introMessage && (
+                        <p className={`text-sm font-bold ${
+                          isDarkMode ? 'text-dark-text-primary' : 'text-gray-700'
+                        }`}>
+                          {release.introMessage}
+                        </p>
+                      )}
+                      {release.changes.map((change, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ x: -20, opacity: 0 }}
+                          animate={{ x: 0, opacity: 1 }}
+                          transition={{ delay: index * 0.1 }}
+                          className={`flex items-start space-x-3 ${
+                            change.important ? 'relative overflow-hidden' : ''
+                          }`}
+                        >
+                          {change.important && (
+                            <div className={`absolute inset-0 bg-${themeColor}-50 dark:bg-${themeColor}-900/10 opacity-50`} />
+                          )}
+                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${getTypeStyles(change.type)}`}>
+                            {getTypeIcon(change.type)}
+                            <span className="ml-1 capitalize">{change.type}</span>
+                          </span>
+                          <p className={`flex-1 text-sm ${
+                            isDarkMode ? 'text-dark-text-primary' : 'text-gray-700'
+                          }`}>
+                            {change.description}
+                          </p>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
         ))}
       </div>
     </div>
