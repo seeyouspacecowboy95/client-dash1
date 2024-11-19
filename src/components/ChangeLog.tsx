@@ -17,7 +17,7 @@ interface ChangeLogEntry {
 
 const changeLogData: ChangeLogEntry[] = [
   {
-    version: '1.2.0',
+    version: '1.0.0-beta',
     date: 'March 15, 2024',
     featured: true,
     changes: [
@@ -28,7 +28,7 @@ const changeLogData: ChangeLogEntry[] = [
     ]
   },
   {
-    version: '1.1.0',
+    version: '1.0.0-beta',
     date: 'March 1, 2024',
     changes: [
       { type: 'added', description: 'Theme color customization with preset palettes', important: true },
@@ -41,7 +41,7 @@ const changeLogData: ChangeLogEntry[] = [
     version: '1.0.0-beta',
     date: 'November 19, 2024',
     featured: true,
-    introMessage: "Initial beta release of Zimako Consumer v1.0! Lots more coming soon though 😁",
+    introMessage: "Initial beta release of Zimako Consumer Portal v1.0! Lots more coming soon though 😁",
     changes: [
       { type: 'added', description: 'Initial release with core functionality', important: true },
       { type: 'added', description: 'Comprehensive dashboard with key metrics' },
