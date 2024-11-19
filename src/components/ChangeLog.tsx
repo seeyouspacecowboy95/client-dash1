@@ -17,8 +17,8 @@ interface ChangeLogEntry {
 
 const changeLogData: ChangeLogEntry[] = [
   {
-    version: '1.0.0-beta',
-    date: 'March 15, 2024',
+    version: '1.0.0-beta2',
+    date: 'November 19, 2024',
     featured: true,
     changes: [
       { type: 'added', description: 'Dark mode support with seamless transitions', important: true },
@@ -28,8 +28,8 @@ const changeLogData: ChangeLogEntry[] = [
     ]
   },
   {
-    version: '1.0.0-beta',
-    date: 'March 1, 2024',
+    version: '1.0.0-beta1',
+    date: 'November 17, 2024',
     changes: [
       { type: 'added', description: 'Theme color customization with preset palettes', important: true },
       { type: 'changed', description: 'Enhanced UI performance with React memo and useMemo' },
@@ -39,7 +39,7 @@ const changeLogData: ChangeLogEntry[] = [
   },
   {
     version: '1.0.0-beta',
-    date: 'November 19, 2024',
+    date: 'November 15, 2024',
     featured: true,
     introMessage: "Initial beta release of Zimako Consumer Portal v1.0! Lots more coming soon though 😁",
     changes: [
