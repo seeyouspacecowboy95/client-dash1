@@ -2,34 +2,34 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 type ThemeColor = 'orange' | 'blue';
 
-type ThemeContextType = {
-  isDark: boolean;
+interface ThemeContextType {
+  isDarkMode: boolean;
   themeColor: ThemeColor;
   toggleTheme: () => void;
   setThemeColor: (color: ThemeColor) => void;
-};
+}
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [isDark, setIsDark] = useState(() => {
-    const saved = localStorage.getItem('theme');
-    return saved === 'dark';
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const savedTheme = localStorage.getItem('theme');
+    return savedTheme === 'dark';
   });
 
   const [themeColor, setThemeColor] = useState<ThemeColor>(() => {
-    const saved = localStorage.getItem('themeColor');
-    return (saved as ThemeColor) || 'orange';
+    const savedColor = localStorage.getItem('themeColor');
+    return (savedColor as ThemeColor) || 'orange';
   });
 
   useEffect(() => {
-    if (isDark) {
+    if (isDarkMode) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-  }, [isDark]);
+    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme-color', themeColor);
@@ -37,11 +37,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, [themeColor]);
 
   const toggleTheme = () => {
-    setIsDark(!isDark);
+    setIsDarkMode(prev => !prev);
   };
 
   return (
-    <ThemeContext.Provider value={{ isDark, themeColor, toggleTheme, setThemeColor }}>
+    <ThemeContext.Provider value={{ isDarkMode, themeColor, toggleTheme, setThemeColor }}>
       {children}
     </ThemeContext.Provider>
   );
