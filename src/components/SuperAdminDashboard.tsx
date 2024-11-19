@@ -77,60 +77,66 @@ export default function SuperAdminDashboard({ onLogout }: { onLogout: () => void
 
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-dark-bg' : 'bg-gray-50'}`}>
-      <SuperAdminNav onLogout={onLogout} />
-      
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {dashboardData.map((item, index) => (
-            <DashboardCard
-              key={index}
-              icon={item.icon}
-              title={item.title}
-              value={item.value}
-              trend={item.trend}
-              trendData={item.trendData}
-              changeType={item.changeType}
-            />
-          ))}
-        </div>
+      <div className="flex flex-col h-screen">
+        {/* Top Navigation */}
+        <SuperAdminNav onLogout={onLogout} />
 
-        {/* Recent Activity */}
-        <div className="mt-8">
-          <h2 className={`text-lg font-semibold ${
-            isDarkMode ? 'text-dark-text-primary' : 'text-gray-900'
-          } mb-4`}>
-            Recent System Activity
-          </h2>
-          <div className={`${isDarkMode ? 'bg-dark-card' : 'bg-white'} shadow-sm rounded-lg`}>
-            <div className="divide-y divide-gray-200 dark:divide-dark-border">
-              <div className="p-4">
-                <p className={`text-sm ${isDarkMode ? 'text-dark-text-secondary' : 'text-gray-600'}`}>
-                  New Account Created
-                </p>
-                <p className={isDarkMode ? 'text-dark-text-primary' : 'text-gray-900'}>
-                  Account #12345 - 15 Mar 2024
-                </p>
-              </div>
-              <div className="p-4">
-                <p className={`text-sm ${isDarkMode ? 'text-dark-text-secondary' : 'text-gray-600'}`}>
-                  Bulk Statement Distribution
-                </p>
-                <p className={isDarkMode ? 'text-dark-text-primary' : 'text-gray-900'}>
-                  2,500 Statements Sent - 14 Mar 2024
-                </p>
-              </div>
-              <div className="p-4">
-                <p className={`text-sm ${isDarkMode ? 'text-dark-text-secondary' : 'text-gray-600'}`}>
-                  Payment Reminder Campaign
-                </p>
-                <p className={isDarkMode ? 'text-dark-text-primary' : 'text-gray-900'}>
-                  1,000 SMS Reminders - 13 Mar 2024
-                </p>
+        {/* Main Content */}
+        <div className="flex-1 overflow-auto">
+          <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {dashboardData.map((item, index) => (
+                <DashboardCard
+                  key={index}
+                  icon={item.icon}
+                  title={item.title}
+                  value={item.value}
+                  trend={item.trend}
+                  trendData={item.trendData}
+                  changeType={item.changeType}
+                />
+              ))}
+            </div>
+
+            {/* Recent Activity */}
+            <div className="mt-8">
+              <h2 className={`text-lg font-semibold ${
+                isDarkMode ? 'text-dark-text-primary' : 'text-gray-900'
+              } mb-4`}>
+                Recent System Activity
+              </h2>
+              <div className={`${isDarkMode ? 'bg-dark-card' : 'bg-white'} shadow-sm rounded-lg`}>
+                <div className="divide-y divide-gray-200 dark:divide-dark-border">
+                  <div className="p-4">
+                    <p className={`text-sm ${isDarkMode ? 'text-dark-text-secondary' : 'text-gray-600'}`}>
+                      New Account Created
+                    </p>
+                    <p className={isDarkMode ? 'text-dark-text-primary' : 'text-gray-900'}>
+                      Account #12345 - 15 Mar 2024
+                    </p>
+                  </div>
+                  <div className="p-4">
+                    <p className={`text-sm ${isDarkMode ? 'text-dark-text-secondary' : 'text-gray-600'}`}>
+                      Bulk Statement Distribution
+                    </p>
+                    <p className={isDarkMode ? 'text-dark-text-primary' : 'text-gray-900'}>
+                      2,500 Statements Sent - 14 Mar 2024
+                    </p>
+                  </div>
+                  <div className="p-4">
+                    <p className={`text-sm ${isDarkMode ? 'text-dark-text-secondary' : 'text-gray-600'}`}>
+                      Payment Reminder Campaign
+                    </p>
+                    <p className={isDarkMode ? 'text-dark-text-primary' : 'text-gray-900'}>
+                      1,000 SMS Reminders - 13 Mar 2024
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          </main>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
