@@ -16,7 +16,14 @@ import {
   FileText,
   Plus,
   Image,
-  History
+  History,
+  Users,
+  FileSpreadsheet,
+  MessageSquare,
+  HelpCircleIcon,
+  Activity,
+  UserPlus,
+  Settings
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -46,6 +53,36 @@ const SuperAdminNav: React.FC<SuperAdminNavProps> = ({ onLogout, onViewChange, c
       icon: <Home className="w-5 h-5" />, 
       href: '#',
       action: () => onViewChange('dashboard')
+    },
+    {
+      name: 'Navigation',
+      icon: <MenuIcon className="w-5 h-5" />,
+      href: '#',
+      items: [
+        { name: 'Reports', icon: <FileText className="w-5 h-5" />, href: '/reports' },
+        { name: 'Statements', icon: <FileSpreadsheet className="w-5 h-5" />, href: '/statements' },
+        {
+          name: 'Accounts',
+          icon: <Users className="w-5 h-5" />,
+          href: '#',
+          items: [
+            { name: 'New Statements', icon: <Plus className="w-5 h-5" />, href: '/accounts/new-statements' },
+            { name: 'View Statements', icon: <FileText className="w-5 h-5" />, href: '/accounts/view-statements' }
+          ]
+        },
+        { name: 'Payment Reminders', icon: <Bell className="w-5 h-5" />, href: '/payment-reminders' },
+        { name: 'Queries', icon: <HelpCircleIcon className="w-5 h-5" />, href: '/queries' },
+        { name: 'Meter Readings', icon: <Activity className="w-5 h-5" />, href: '/meter-readings' },
+        {
+          name: 'Users',
+          icon: <Users className="w-5 h-5" />,
+          href: '#',
+          items: [
+            { name: 'Add Users', icon: <UserPlus className="w-5 h-5" />, href: '/users/add' },
+            { name: 'Manage Users', icon: <Settings className="w-5 h-5" />, href: '/users/manage' }
+          ]
+        }
+      ]
     },
     {
       name: 'Interface',
@@ -93,6 +130,42 @@ const SuperAdminNav: React.FC<SuperAdminNavProps> = ({ onLogout, onViewChange, c
       ]
     },
   ];
+
+  const renderSubMenu = (items: NavItem[]) => (
+    <div className={`absolute left-0 mt-0 w-48 ${
+      isDarkMode ? 'bg-dark-card' : 'bg-white'
+    } shadow-lg rounded-md py-1 ring-1 ring-black ring-opacity-5 z-50`}>
+      {items.map((item) => (
+        <Menu.Item key={item.name}>
+          {({ active }) => (
+            <div className="relative group">
+              <button
+                onClick={() => item.action ? item.action() : null}
+                className={`${
+                  active ? (isDarkMode ? 'bg-dark-hover' : `bg-${themeColor}-50`) : ''
+                } flex items-center w-full px-4 py-2 text-sm ${
+                  isDarkMode ? 'text-dark-text-primary' : 'text-gray-700'
+                } transition-colors duration-150`}
+              >
+                {React.cloneElement(item.icon as React.ReactElement, {
+                  className: `w-5 h-5 ${active ? `text-${themeColor}-500` : ''} transition-colors duration-150`
+                })}
+                <span className="ml-2">{item.name}</span>
+                {item.items && (
+                  <ChevronDown className="ml-auto w-4 h-4 transform -rotate-90" />
+                )}
+              </button>
+              {item.items && (
+                <div className="absolute left-full top-0 hidden group-hover:block">
+                  {renderSubMenu(item.items)}
+                </div>
+              )}
+            </div>
+          )}
+        </Menu.Item>
+      ))}
+    </div>
+  );
 
   const handleItemClick = (item: NavItem) => {
     setActiveItem(item.name);
@@ -284,28 +357,8 @@ const SuperAdminNav: React.FC<SuperAdminNavProps> = ({ onLogout, onViewChange, c
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95"
                       >
-                        <Menu.Items className={`absolute left-0 mt-2 w-48 ${
-                          isDarkMode ? 'bg-dark-card' : 'bg-white'
-                        } shadow-lg rounded-md py-1 ring-1 ring-black ring-opacity-5 z-50`}>
-                          {item.items.map((subItem) => (
-                            <Menu.Item key={subItem.name}>
-                              {({ active }) => (
-                                <button
-                                  onClick={() => subItem.action ? subItem.action() : null}
-                                  className={`${
-                                    active ? (isDarkMode ? 'bg-dark-hover' : `bg-${themeColor}-50`) : ''
-                                  } flex w-full px-4 py-2 text-sm ${
-                                    isDarkMode ? 'text-dark-text-primary' : 'text-gray-700'
-                                  } transition-colors duration-150`}
-                                >
-                                  {React.cloneElement(subItem.icon as React.ReactElement, {
-                                    className: `w-5 h-5 ${active ? `text-${themeColor}-500` : ''} transition-colors duration-150`
-                                  })}
-                                  <span className="ml-2">{subItem.name}</span>
-                                </button>
-                              )}
-                            </Menu.Item>
-                          ))}
+                        <Menu.Items className="absolute left-0 mt-2 origin-top-left">
+                          {renderSubMenu(item.items)}
                         </Menu.Items>
                       </Transition>
                     )}

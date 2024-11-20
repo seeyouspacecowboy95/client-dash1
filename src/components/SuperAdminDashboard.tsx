@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Users, DollarSign, FileText, Activity, MessageSquare, HandshakeIcon } from 'lucide-react';
+import { Users, DollarSign, FileText, Activity, MessageSquare, HandshakeIcon, PlusCircle } from 'lucide-react';
 import SuperAdminNav from './SuperAdminNav';
 import DashboardCard from './DashboardCard';
 import ChangeLog from './ChangeLog';
@@ -23,7 +23,7 @@ const determineChangeType = (trend: number): 'increase' | 'decrease' | 'neutral'
 };
 
 export default function SuperAdminDashboard({ onLogout }: { onLogout: () => void }) {
-  const { isDarkMode } = useTheme();
+  const { isDarkMode, themeColor } = useTheme();
   const [currentView, setCurrentView] = useState<'dashboard' | 'changelog'>('dashboard');
   
   const dashboardData = [
@@ -90,6 +90,24 @@ export default function SuperAdminDashboard({ onLogout }: { onLogout: () => void
               <ChangeLog />
             ) : (
               <>
+                {/* Dashboard Header */}
+                <div className="flex justify-between items-center mb-8">
+                  <div>
+                    <h1 className={`text-2xl font-bold ${isDarkMode ? 'text-dark-text-primary' : 'text-gray-900'}`}>
+                      Dashboard
+                    </h1>
+                    <p className={`mt-1 text-sm ${isDarkMode ? 'text-dark-text-secondary' : 'text-gray-500'}`}>
+                      Overview
+                    </p>
+                  </div>
+                  <button
+                    className={`inline-flex items-center px-4 py-2 rounded-md bg-${themeColor}-500 text-white hover:bg-${themeColor}-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${themeColor}-500 transition-colors duration-200`}
+                  >
+                    <PlusCircle className="w-5 h-5 mr-2" />
+                    Create New Report
+                  </button>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {dashboardData.map((item, index) => (
                     <DashboardCard
