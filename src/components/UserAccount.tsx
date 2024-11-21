@@ -67,7 +67,7 @@ export default function UserAccount({
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">User Profile</h2>
         <div className="space-y-4">
           <div className="flex justify-between items-center">
-            <span className="text-gray-600 dark:text-gray-400">Name:</span>
+            <span className="text-gray-600 dark:text-gray-400">Account Holder:</span>
             <span className="font-medium text-gray-900 dark:text-white">{userName}</span>
           </div>
           <div className="flex justify-between items-center">
@@ -83,36 +83,6 @@ export default function UserAccount({
             <span className="font-medium text-gray-900 dark:text-white">R {lastAmountPaid}</span>
           </div>
         </div>
-      </div>
-
-      {/* Payment Arrangements Section */}
-      <div className="bg-white dark:bg-dark-card rounded-lg shadow-sm p-6">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">My Payment Arrangements</h2>
-        {arrangements.length > 0 ? (
-          <div className="space-y-4">
-            {arrangements.map((arrangement, index) => (
-              <div key={index} className="border dark:border-gray-700 rounded-lg p-4">
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-gray-600 dark:text-gray-400">ACC: {arrangement.accountNumber}</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Calendar className="w-5 h-5 text-theme" />
-                    <span className="text-gray-600 dark:text-gray-400">{arrangement.arrangementDate}</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <DollarSign className="w-5 h-5 text-theme" />
-                    <span className="text-gray-900 dark:text-white">R {arrangement.amountArranged}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-gray-600 dark:text-gray-400 text-center py-4">
-            No payment arrangements found
-          </p>
-        )}
       </div>
 
       {/* Communication Preferences Section */}

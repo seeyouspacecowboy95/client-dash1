@@ -23,6 +23,7 @@ const changeLogData: ChangeLogEntry[] = [
     changes: [
       { type: 'added', description: 'Dark mode support with seamless transitions', important: true },
       { type: 'added', description: 'Advanced dashboard analytics with real-time updates' },
+      { type: 'added', description: 'React Hot Toast notifications across the whole application' },
       { type: 'fixed', description: 'Mobile navigation responsiveness and touch interactions' },
       { type: 'changed', description: 'Optimized database queries for faster performance' },
     ]

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Toaster } from 'react-hot-toast';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Features from './components/Features';
@@ -62,6 +63,21 @@ function App() {
 
   return (
     <ThemeProvider>
+      <Toaster position="top-right" toastOptions={{
+        success: {
+          style: {
+            background: '#10B981',
+            color: '#FFFFFF',
+          },
+        },
+        error: {
+          style: {
+            background: '#EF4444',
+            color: '#FFFFFF',
+          },
+        },
+      }} />
+      
       {isLoading ? (
         <LoadingSpinner />
       ) : isLoggedIn && currentUser ? (
