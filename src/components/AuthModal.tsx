@@ -3,6 +3,7 @@ import { X } from 'lucide-react';
 import { validateCredentials } from '../utils/auth';
 import ForgotPasswordForm from './ForgotPasswordForm';
 import AccountNumberInput from './AccountNumberInput';
+import PasswordInput, { isPasswordValid } from './PasswordInput';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -11,6 +12,8 @@ interface AuthModalProps {
   onLoginSuccess: (email: string) => void;
   onNewUserSignup: (email: string, name: string) => void;
 }
+
+type View = 'login' | 'signup' | 'forgot-password';
 
 interface FormErrors {
   fullName?: string;
@@ -35,8 +38,6 @@ const WelcomeMessage = () => (
     </ul>
   </div>
 );
-
-type View = 'login' | 'signup' | 'forgot-password';
 
 export default function AuthModal({
   isOpen,
@@ -88,8 +89,8 @@ export default function AuthModal({
       case 'password':
         return !value
           ? 'Password is required'
-          : value.length < 8
-          ? 'Password must be at least 8 characters'
+          : !isPasswordValid(value)
+          ? 'Password does not meet requirements'
           : '';
       case 'confirmPassword':
         return !value
@@ -165,6 +166,7 @@ export default function AuthModal({
 
   const handleResetRequest = (email: string) => {
     console.log('Password reset requested for:', email);
+    // Implement password reset logic here
   };
 
   if (!isOpen) return null;
@@ -204,16 +206,13 @@ export default function AuthModal({
                       placeholder="Enter your email"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Password</label>
-                    <input
-                      type="password"
-                      value={loginPassword}
-                      onChange={(e) => setLoginPassword(e.target.value)}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme focus:ring-theme"
-                      placeholder="Enter your password"
-                    />
-                  </div>
+                  <PasswordInput
+                    value={loginPassword}
+                    onChange={(value) => setLoginPassword(value)}
+                    name="loginPassword"
+                    label="Password"
+                    placeholder="Enter your password"
+                  />
                   <div className="flex justify-end">
                     <button
                       type="button"
@@ -245,116 +244,106 @@ export default function AuthModal({
               <>
                 <h2 className="text-3xl font-bold text-gray-900">Sign Up</h2>
                 <form onSubmit={handleSignup} className="space-y-4">
-                  <div className="grid grid-cols-1 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Full Name</label>
-                      <input
-                        type="text"
-                        name="fullName"
-                        value={formData.fullName}
-                        onChange={handleInputChange}
-                        className={`mt-1 block w-full rounded-md shadow-sm focus:ring-theme focus:border-theme ${
-                          errors.fullName ? 'border-red-500' : 'border-gray-300'
-                        }`}
-                        placeholder="Enter your full name"
-                      />
-                      {errors.fullName && (
-                        <p className="mt-1 text-sm text-red-500">{errors.fullName}</p>
-                      )}
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Email Address</label>
-                      <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        className={`mt-1 block w-full rounded-md shadow-sm focus:ring-theme focus:border-theme ${
-                          errors.email ? 'border-red-500' : 'border-gray-300'
-                        }`}
-                        placeholder="Enter your email"
-                      />
-                      {errors.email && (
-                        <p className="mt-1 text-sm text-red-500">{errors.email}</p>
-                      )}
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">ID Number</label>
-                      <input
-                        type="text"
-                        name="idNumber"
-                        value={formData.idNumber}
-                        onChange={handleInputChange}
-                        className={`mt-1 block w-full rounded-md shadow-sm focus:ring-theme focus:border-theme ${
-                          errors.idNumber ? 'border-red-500' : 'border-gray-300'
-                        }`}
-                        placeholder="Enter your 13-digit ID number"
-                        maxLength={13}
-                      />
-                      {errors.idNumber && (
-                        <p className="mt-1 text-sm text-red-500">{errors.idNumber}</p>
-                      )}
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Cellphone Number</label>
-                      <input
-                        type="text"
-                        name="cellphone"
-                        value={formData.cellphone}
-                        onChange={handleInputChange}
-                        className={`mt-1 block w-full rounded-md shadow-sm focus:ring-theme focus:border-theme ${
-                          errors.cellphone ? 'border-red-500' : 'border-gray-300'
-                        }`}
-                        placeholder="Enter your cellphone number"
-                      />
-                      {errors.cellphone && (
-                        <p className="mt-1 text-sm text-red-500">{errors.cellphone}</p>
-                      )}
-                    </div>
-
-                    <AccountNumberInput
-                      value={formData.accountNumber}
-                      onChange={handleAccountNumberChange}
-                      error={errors.accountNumber}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Full Name</label>
+                    <input
+                      type="text"
+                      name="fullName"
+                      value={formData.fullName}
+                      onChange={handleInputChange}
+                      className={`mt-1 block w-full rounded-md shadow-sm focus:ring-theme focus:border-theme ${
+                        errors.fullName ? 'border-red-500' : 'border-gray-300'
+                      }`}
+                      placeholder="Enter your full name"
                     />
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Password</label>
-                      <input
-                        type="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleInputChange}
-                        className={`mt-1 block w-full rounded-md shadow-sm focus:ring-theme focus:border-theme ${
-                          errors.password ? 'border-red-500' : 'border-gray-300'
-                        }`}
-                        placeholder="Create a password"
-                      />
-                      {errors.password && (
-                        <p className="mt-1 text-sm text-red-500">{errors.password}</p>
-                      )}
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Confirm Password</label>
-                      <input
-                        type="password"
-                        name="confirmPassword"
-                        value={formData.confirmPassword}
-                        onChange={handleInputChange}
-                        className={`mt-1 block w-full rounded-md shadow-sm focus:ring-theme focus:border-theme ${
-                          errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
-                        }`}
-                        placeholder="Confirm your password"
-                      />
-                      {errors.confirmPassword && (
-                        <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>
-                      )}
-                    </div>
+                    {errors.fullName && (
+                      <p className="mt-1 text-sm text-red-500">{errors.fullName}</p>
+                    )}
                   </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Email Address</label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className={`mt-1 block w-full rounded-md shadow-sm focus:ring-theme focus:border-theme ${
+                        errors.email ? 'border-red-500' : 'border-gray-300'
+                      }`}
+                      placeholder="Enter your email"
+                    />
+                    {errors.email && (
+                      <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">ID Number</label>
+                    <input
+                      type="text"
+                      name="idNumber"
+                      value={formData.idNumber}
+                      onChange={handleInputChange}
+                      className={`mt-1 block w-full rounded-md shadow-sm focus:ring-theme focus:border-theme ${
+                        errors.idNumber ? 'border-red-500' : 'border-gray-300'
+                      }`}
+                      placeholder="Enter your 13-digit ID number"
+                      maxLength={13}
+                    />
+                    {errors.idNumber && (
+                      <p className="mt-1 text-sm text-red-500">{errors.idNumber}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Cellphone Number</label>
+                    <input
+                      type="text"
+                      name="cellphone"
+                      value={formData.cellphone}
+                      onChange={handleInputChange}
+                      className={`mt-1 block w-full rounded-md shadow-sm focus:ring-theme focus:border-theme ${
+                        errors.cellphone ? 'border-red-500' : 'border-gray-300'
+                      }`}
+                      placeholder="Enter your cellphone number"
+                    />
+                    {errors.cellphone && (
+                      <p className="mt-1 text-sm text-red-500">{errors.cellphone}</p>
+                    )}
+                  </div>
+
+                  <AccountNumberInput
+                    value={formData.accountNumber}
+                    onChange={handleAccountNumberChange}
+                    error={errors.accountNumber}
+                  />
+
+                  <PasswordInput
+                    value={formData.password}
+                    onChange={(value) => 
+                      handleInputChange({ 
+                        target: { name: 'password', value } 
+                      } as React.ChangeEvent<HTMLInputElement>)
+                    }
+                    name="password"
+                    label="Password"
+                    error={errors.password}
+                    placeholder="Create a password"
+                  />
+
+                  <PasswordInput
+                    value={formData.confirmPassword}
+                    onChange={(value) =>
+                      handleInputChange({
+                        target: { name: 'confirmPassword', value }
+                      } as React.ChangeEvent<HTMLInputElement>)
+                    }
+                    name="confirmPassword"
+                    label="Confirm Password"
+                    error={errors.confirmPassword}
+                    placeholder="Confirm your password"
+                  />
 
                   <button
                     type="submit"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Check, X, Loader2 } from 'lucide-react';
 import { db } from '../firebaseConfig';
 import { collection, query, where, getDocs } from 'firebase/firestore';
@@ -9,72 +9,113 @@ interface AccountNumberInputProps {
   error?: string;
 }
 
+// Separate component for validation status icon to prevent unnecessary re-renders
+const ValidationStatus = React.memo(({ 
+  isValidating, 
+  shouldShowStatus, 
+  isValid 
+}: { 
+  isValidating: boolean;
+  shouldShowStatus: boolean;
+  isValid: boolean;
+}) => {
+  if (isValidating) {
+    return <Loader2 className="h-5 w-5 text-gray-400 animate-spin" />;
+  }
+  if (shouldShowStatus) {
+    return isValid ? 
+      <Check className="h-5 w-5 text-green-500 opacity-100 transition-opacity duration-200" /> :
+      <X className="h-5 w-5 text-red-500 opacity-100 transition-opacity duration-200" />;
+  }
+  return null;
+});
+
+ValidationStatus.displayName = 'ValidationStatus';
+
 export default function AccountNumberInput({ value, onChange, error }: AccountNumberInputProps) {
   const [isValidating, setIsValidating] = useState(false);
   const [isValid, setIsValid] = useState(false);
-  const [showStatus, setShowStatus] = useState(false);
   const [validationMessage, setValidationMessage] = useState('');
+  const [shouldShowStatus, setShouldShowStatus] = useState(false);
+
+  const validateAccountNumber = useCallback(async (inputValue: string) => {
+    if (!inputValue || inputValue.length < 4) {
+      setShouldShowStatus(false);
+      setIsValid(false);
+      setValidationMessage('');
+      onChange(inputValue, false);
+      return;
+    }
+
+    // Don't show loading state for quick responses
+    const loadingTimeout = setTimeout(() => {
+      setIsValidating(true);
+    }, 150);
+
+    try {
+      const profilesRef = collection(db, 'profiles');
+      const q = query(profilesRef, where('customerNumber', '==', inputValue));
+      const querySnapshot = await getDocs(q);
+      
+      const valid = !querySnapshot.empty;
+      let customerName = '';
+      
+      if (valid) {
+        const userData = querySnapshot.docs[0].data();
+        customerName = userData.fullName || '';
+      }
+
+      // Only update states if the input value hasn't changed during validation
+      if (inputValue === value) {
+        clearTimeout(loadingTimeout);
+        setIsValidating(false);
+        
+        // Batch state updates together
+        Promise.resolve().then(() => {
+          setIsValid(valid);
+          setValidationMessage(valid ? `Verified: ${customerName}` : 'Account number not found');
+          setShouldShowStatus(true);
+          onChange(inputValue, valid);
+        });
+      }
+    } catch (error) {
+      console.error('Error validating account number:', error);
+      if (inputValue === value) {
+        clearTimeout(loadingTimeout);
+        setIsValidating(false);
+        
+        // Batch state updates together
+        Promise.resolve().then(() => {
+          setIsValid(false);
+          setValidationMessage('Error validating account number');
+          setShouldShowStatus(true);
+          onChange(inputValue, false);
+        });
+      }
+    }
+  }, [onChange, value]);
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
+    const timeoutId = setTimeout(() => {
+      validateAccountNumber(value);
+    }, 500);
 
-    const validateAccountNumber = async () => {
-      if (!value || value.length < 4) {
-        setShowStatus(false);
-        setIsValid(false);
-        setValidationMessage('');
-        onChange(value, false);
-        return;
-      }
-
-      setIsValidating(true);
-      setShowStatus(false);
-      setValidationMessage('');
-
-      try {
-        // Query Firestore for the account number in the profiles collection
-        const profilesRef = collection(db, 'profiles');
-        const q = query(profilesRef, where('customerNumber', '==', value));
-        const querySnapshot = await getDocs(q);
-        
-        const valid = !querySnapshot.empty;
-        
-        // If valid, get the customer details
-        let customerName = '';
-        if (valid) {
-          const userData = querySnapshot.docs[0].data();
-          customerName = userData.fullName || '';
-        }
-
-        setIsValid(valid);
-        setValidationMessage(valid ? `Verified: ${customerName}` : 'Account number not found');
-        onChange(value, valid);
-      } catch (error) {
-        console.error('Error validating account number:', error);
-        setIsValid(false);
-        setValidationMessage('Error validating account number');
-        onChange(value, false);
-      } finally {
-        setIsValidating(false);
-        setShowStatus(true);
-      }
-    };
-
-    // Debounce the validation to avoid too many requests
-    timeoutId = setTimeout(validateAccountNumber, 800);
-
-    return () => {
-      if (timeoutId) clearTimeout(timeoutId);
-    };
-  }, [value, onChange]);
+    return () => clearTimeout(timeoutId);
+  }, [value, validateAccountNumber]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value.trim();
-    // Only allow alphanumeric characters (letters and numbers)
     if (/^[a-zA-Z0-9]*$/.test(newValue) || newValue === '') {
       onChange(newValue, false);
+      setShouldShowStatus(false);
     }
   };
+
+  const borderColorClass = error 
+    ? 'border-red-500' 
+    : isValid && shouldShowStatus
+    ? 'border-green-500' 
+    : 'border-gray-300';
 
   return (
     <div>
@@ -86,27 +127,21 @@ export default function AccountNumberInput({ value, onChange, error }: AccountNu
           type="text"
           value={value}
           onChange={handleInputChange}
-          className={`block w-full pr-10 rounded-md shadow-sm ${
-            error ? 'border-red-500' : isValid ? 'border-green-500' : 'border-gray-300'
-          } focus:ring-theme focus:border-theme`}
+          className={`block w-full pr-10 rounded-md shadow-sm transition-all duration-200 ${borderColorClass} focus:ring-theme focus:border-theme`}
           placeholder="Enter your account number"
           maxLength={20}
           pattern="[a-zA-Z0-9]*"
         />
-        <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
-          {isValidating ? (
-            <Loader2 className="h-5 w-5 text-gray-400 animate-spin" />
-          ) : showStatus ? (
-            isValid ? (
-              <Check className="h-5 w-5 text-green-500" />
-            ) : (
-              <X className="h-5 w-5 text-red-500" />
-            )
-          ) : null}
+        <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+          <ValidationStatus
+            isValidating={isValidating}
+            shouldShowStatus={shouldShowStatus}
+            isValid={isValid}
+          />
         </div>
       </div>
       {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
-      {!error && showStatus && validationMessage && (
+      {!error && shouldShowStatus && validationMessage && (
         <p className={`mt-1 text-sm ${isValid ? 'text-green-600' : 'text-red-500'}`}>
           {validationMessage}
         </p>
