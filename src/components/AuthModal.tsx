@@ -166,7 +166,6 @@ export default function AuthModal({
 
   const handleResetRequest = (email: string) => {
     console.log('Password reset requested for:', email);
-    // Implement password reset logic here
   };
 
   if (!isOpen) return null;
@@ -212,6 +211,7 @@ export default function AuthModal({
                     name="loginPassword"
                     label="Password"
                     placeholder="Enter your password"
+                    showRequirements={false}
                   />
                   <div className="flex justify-end">
                     <button
@@ -330,6 +330,7 @@ export default function AuthModal({
                     label="Password"
                     error={errors.password}
                     placeholder="Create a password"
+                    showRequirements={true}
                   />
 
                   <PasswordInput
@@ -343,6 +344,7 @@ export default function AuthModal({
                     label="Confirm Password"
                     error={errors.confirmPassword}
                     placeholder="Confirm your password"
+                    showRequirements={false}
                   />
 
                   <button

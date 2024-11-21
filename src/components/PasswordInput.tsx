@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Eye, EyeOff, Check, X } from 'lucide-react';
 
 interface PasswordInputProps {
@@ -8,6 +8,7 @@ interface PasswordInputProps {
   label: string;
   error?: string;
   placeholder?: string;
+  showRequirements?: boolean;
 }
 
 interface ValidationRule {
@@ -35,13 +36,13 @@ const passwordRules: ValidationRule[] = [
   {
     id: 'number',
     label: 'One number',
-    validate: (value) => /\d/.test(value),
+    validate: (value) => /[0-9]/.test(value),
   },
   {
     id: 'special',
-    label: 'One special character',
+    label: 'One special character (!@#$%^&*)',
     validate: (value) => /[!@#$%^&*(),.?":{}|<>]/.test(value),
-  },
+  }
 ];
 
 export const isPasswordValid = (password: string): boolean => {
@@ -55,9 +56,21 @@ export default function PasswordInput({
   label,
   error,
   placeholder,
+  showRequirements = false
 }: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
+  const [shouldShowRequirements, setShouldShowRequirements] = useState(false);
+
+  useEffect(() => {
+    if (showRequirements) {
+      if (value && !isPasswordValid(value)) {
+        setShouldShowRequirements(true);
+      } else {
+        setShouldShowRequirements(false);
+      }
+    }
+  }, [value, showRequirements]);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -96,7 +109,7 @@ export default function PasswordInput({
       {error && (
         <p className="mt-1 text-sm text-red-500">{error}</p>
       )}
-      {(isFocused || value) && (
+      {showRequirements && shouldShowRequirements && (
         <div className="mt-2 space-y-2">
           {passwordRules.map((rule) => (
             <div
